@@ -2,10 +2,31 @@ import enum
 
 
 class Laby:
-    def __init__(self, size=None):
-        size = size or [2, 2]
-        n_rows, n_cols = size
-        self.data = [[Node() for _ in range(n_cols)] for _ in range(n_rows)]
+    @classmethod
+    def zeros(cls, shape):
+        return cls.full(shape)
+
+    @classmethod
+    def ones(cls, shape):
+        return cls.full(shape, Node(Dir))
+
+    @classmethod
+    def full(cls, shape, fill_value=None):
+        def get_data(shape_, fill_value_):
+            if not shape_:
+                try:
+                    return fill_value_()
+                except TypeError:
+                    return fill_value_
+
+            dim, *shape_ = shape_
+            return [get_data(shape_, fill_value_) for _ in range(dim)]
+
+        fill_value = fill_value or Node()
+        return cls(get_data(shape, fill_value))
+
+    def __init__(self, data):
+        self.data = data
 
     @property
     def strs(self):
