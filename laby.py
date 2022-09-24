@@ -1,17 +1,21 @@
+from __future__ import annotations
+
+from collections.abc import Sequence, Callable, Iterable
 import enum
+from typing import Any
 
 
 class Laby:
     @classmethod
-    def zeros(cls, shape):
+    def zeros(cls, shape: Sequence[int]):
         return cls.full(shape)
 
     @classmethod
-    def ones(cls, shape):
+    def ones(cls, shape: Sequence[int]):
         return cls.full(shape, Node(Dir))
 
     @classmethod
-    def full(cls, shape, fill_value=None):
+    def full(cls, shape: Sequence[int], fill_value: Callable[[], Any] | Any = None):
         def get_data(shape_, fill_value_):
             if not shape_:
                 try:
@@ -25,21 +29,21 @@ class Laby:
         fill_value = fill_value or Node()
         return cls(get_data(shape, fill_value))
 
-    def __init__(self, data):
+    def __init__(self, data: Sequence[Sequence]):
         self.data = data
 
     @property
-    def strs(self):
+    def strs(self) -> Iterable[str]:
         for row_nodes in self.data:
             for strs in zip(*(node.strs for node in row_nodes)):
                 yield ''.join(strs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return '\n'.join(self.strs)
 
 
 class Node:
-    def __init__(self, dirs=None):
+    def __init__(self, dirs: Sequence[Dir] | None = None):
         dirs = dirs or [
             # Dir.LEFT,
             # Dir.RIGHT,
@@ -49,11 +53,11 @@ class Node:
         self.dirs = dirs
 
     @property
-    def strs(self):
+    def strs(self) -> Iterable[str]:
         yield f'{Chars.LRUD_CORNER}{Chars.EMPTY if Dir.UP in self.dirs else Chars.H_WALL}'
         yield f'{Chars.EMPTY if Dir.LEFT in self.dirs else Chars.V_WALL}{Chars.EMPTY}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return '\n'.join(self.strs)
 
 
@@ -65,12 +69,6 @@ class Dir(enum.Enum):
 
 
 class Chars:
-    # ┌────┬────┐
-    # │    │    │
-    # ├────┼────┤
-    # │    │    │
-    # └────┴────┘
-
     H_SIZE = 4
 
     EMPTY = ' ' * H_SIZE
