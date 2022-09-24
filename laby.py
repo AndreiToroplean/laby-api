@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence, Callable, Iterable
 import enum
+from functools import cache
 from typing import Any
 
 
@@ -16,7 +17,7 @@ class Laby:
 
     @classmethod
     def full(cls, shape: Sequence[int], fill_value: Callable[[], Any] | Any = None):
-        def get_data(shape_, fill_value_):
+        def get_grid(shape_, fill_value_):
             if not shape_:
                 try:
                     return fill_value_()
@@ -24,28 +25,83 @@ class Laby:
                     return fill_value_
 
             dim, *shape_ = shape_
-            return [get_data(shape_, fill_value_) for _ in range(dim)]
+            return [get_grid(shape_, fill_value_) for _ in range(dim)]
 
         fill_value = fill_value or Node()
-        return cls(get_data(shape, fill_value))
+        return cls(get_grid(shape, fill_value))
 
-    def __init__(self, data: Sequence[Sequence]):
-        self.data = data
-
-    @property
-    def strs(self) -> Iterable[str]:
-        for row_nodes in self.data:
-            for strs in zip(*(node.strs() for node in row_nodes)):
-                yield ''.join(strs)
+    def __init__(self, grid: Sequence[Sequence]):
+        self.grid = grid
 
     def __str__(self) -> str:
         return '\n'.join(self.strs)
+
+    @property
+    def strs(self) -> Iterable[str]:
+        for i, row_nodes in enumerate(self.grid):
+            for strs in zip(*(node.strs(self._get_neighbors((i, j))) for j, node in enumerate(row_nodes))):
+                yield ''.join(strs)
+
+    def _get_neighbors(self, node_indices):
+        def get_neighbor(i_, j_):
+            wall_dirs = Dirs.NONE
+            if i_ < 0:
+                wall_dirs |= Dirs.DOWN
+            elif i_ >= max_i:
+                wall_dirs |= Dirs.UP
+            if j_ < 0:
+                wall_dirs |= Dirs.RIGHT
+            elif j_ >= max_j:
+                wall_dirs |= Dirs.LEFT
+
+            if wall_dirs:
+                return Node.wall(wall_dirs)
+
+            return self.grid[i_][j_]
+
+        max_i, max_j = self._shape
+        i, j = node_indices
+        return {
+            Dirs.LEFT: get_neighbor(i, j-1),
+            Dirs.RIGHT: get_neighbor(i, j+1),
+            Dirs.UP: get_neighbor(i-1, j),
+            Dirs.DOWN: get_neighbor(i+1, j),
+        }
+
+    @property
+    @cache
+    def _shape(self):
+        def f(grid):
+            try:
+                sub_grid = grid[0]
+            except TypeError:
+                return ()
+
+            return len(grid), *f(sub_grid)
+
+        return f(self.grid)
 
 
 class Node:
     @classmethod
     def all(cls):
         return cls(Dirs.ALL)
+
+    @classmethod
+    def wall(cls, wall_dirs):
+        dirs = Dirs.NONE
+        n_walls = 0
+        for dir_ in Dirs.seq():
+            if not wall_dirs & dir_:
+                dirs |= dir_
+            else:
+                n_walls += 1
+
+        if n_walls == 2:
+            # Node is outside a corner.
+            return cls.all()
+
+        return cls(dirs)
 
     def __init__(self, dirs: Dirs | None = None):
         dirs = dirs or Dirs.NONE
@@ -58,29 +114,28 @@ class Node:
         if neighbors is None:
             return self._basic_strs()
 
-        return (''.join(strs[-1]) for strs in self._all_strs(neighbors)[-1])
+        return (''.join(strs[:-1]) for strs in self._strs_seqs(neighbors)[:-1])
 
-    def _all_strs(self, neighbors: dict[Dirs, Node]) -> Sequence[Sequence[str]]:
-
+    def _strs_seqs(self, neighbors: dict[Dirs, Node]) -> Sequence[Sequence[str]]:
         def corner_char(corner_dir: Dirs) -> str:
-            h_dir = corner_dir & Dirs.LEFT
-            v_dir = corner_dir & Dirs.UP
+            h_dir = corner_dir & Dirs.H
+            v_dir = corner_dir & Dirs.V
 
             # Assert good use of this function.
             assert not corner_dir & Dirs.LEFT or not corner_dir & Dirs.RIGHT
             assert not corner_dir & Dirs.UP or not corner_dir & Dirs.DOWN
             assert h_dir and v_dir
 
-            return Char.CORNER[
-                Dirs.NONE if neighbors[h_dir].dirs & v_dir else h_dir
-                | Dirs.NONE if neighbors[v_dir].dirs & ~v_dir else ~h_dir
-                | Dirs.NONE if neighbors[v_dir].dirs & h_dir else v_dir
-                | Dirs.NONE if neighbors[h_dir].dirs & ~h_dir else ~v_dir
+            char = Char.CORNER[
+                (Dirs.NONE if neighbors[h_dir].dirs & v_dir else h_dir)
+                | (Dirs.NONE if neighbors[v_dir].dirs & ~v_dir else ~h_dir)
+                | (Dirs.NONE if neighbors[v_dir].dirs & h_dir else v_dir)
+                | (Dirs.NONE if neighbors[h_dir].dirs & ~h_dir else ~v_dir)
             ]
+            return char
 
         self._check_neighbors(neighbors)
-
-        return [
+        strs_seqs = [
             [
                 corner_char(Dirs.LEFT | Dirs.UP),
                 Char.H_SPACE if self.dirs & Dirs.UP else Char.H_WALL,
@@ -97,10 +152,14 @@ class Node:
                 corner_char(Dirs.RIGHT | Dirs.DOWN),
             ],
         ]
+        return strs_seqs
 
     def _check_neighbors(self, neighbors: dict[Dirs, Node]):
         def check_neighbor(neighbor_dir: Dirs) -> bool:
-            return self.dirs & neighbor_dir and neighbors[neighbor_dir].dirs & ~neighbor_dir
+            return (
+                (self.dirs & neighbor_dir or not neighbors[neighbor_dir].dirs & ~neighbor_dir)
+                and (not self.dirs & neighbor_dir or neighbors[neighbor_dir].dirs & ~neighbor_dir)
+            )
 
         for dir_ in Dirs.seq():
             if not check_neighbor(dir_):
@@ -173,6 +232,7 @@ class Char:
     LRUD_CORNER = '┼'
 
     CORNER = {
+        Dirs.NONE: V_SPACE,
         Dirs.LEFT: L_CORNER,
         Dirs.RIGHT: R_CORNER,
         Dirs.UP: U_CORNER,
