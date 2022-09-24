@@ -43,13 +43,12 @@ class Laby:
 
 
 class Node:
+    @classmethod
+    def all(cls):
+        return cls(Dir)
+
     def __init__(self, dirs: Sequence[Dir] | None = None):
-        dirs = dirs or [
-            # Dir.LEFT,
-            # Dir.RIGHT,
-            # Dir.UP,
-            # Dir.DOWN,
-        ]
+        dirs = dirs or []
         self.dirs = dirs
 
     @property
