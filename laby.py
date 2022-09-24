@@ -53,8 +53,8 @@ class Node:
 
     @property
     def strs(self) -> Iterable[str]:
-        yield f'{Chars.LRUD_CORNER}{Chars.H_EMPTY if Dir.UP in self.dirs else Chars.H_WALL}'
-        yield f'{Chars.V_EMPTY if Dir.LEFT in self.dirs else Chars.V_WALL}{Chars.H_EMPTY}'
+        yield f'{Char.LRUD_CORNER}{Char.H_EMPTY if Dir.UP in self.dirs else Char.H_WALL}'
+        yield f'{Char.V_EMPTY if Dir.LEFT in self.dirs else Char.V_WALL}{Char.H_EMPTY}'
 
     def __str__(self) -> str:
         return '\n'.join(self.strs)
@@ -67,7 +67,7 @@ class Dir(enum.Enum):
     DOWN = (0, -1)
 
 
-class Chars:
+class Char:
     H_SIZE = 4
 
     H_EMPTY = ' ' * H_SIZE
