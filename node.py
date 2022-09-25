@@ -15,11 +15,13 @@ class Node:
 
     @classmethod
     def wall(cls, wall_dirs):
-        return cls(~wall_dirs, is_wall=True)
+        node = cls(~wall_dirs)
+        node._is_wall = True
+        return node
 
-    def __init__(self, dirs: Dirs, is_wall: bool = False):
+    def __init__(self, dirs: Dirs):
         self.dirs = dirs
-        self._is_wall = is_wall
+        self._is_wall = False
 
     def __str__(self) -> str:
         return '\n'.join(self.strs())
