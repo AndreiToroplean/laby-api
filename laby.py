@@ -30,7 +30,7 @@ class Laby:
 
         return cls(get_grid(shape, fill_value))
 
-    def __init__(self, grid: Sequence[Sequence]):
+    def __init__(self, grid: list[list[Node]]):
         self.grid = grid
         self._enforce_walls()
 
@@ -51,9 +51,16 @@ class Laby:
 
     @property
     def strs(self) -> Iterable[str]:
-        for i, row in enumerate(self.grid):
+        for i, row in enumerate(self._display_grid):
             for strs in zip(*(node.strs(self._get_neighbors((i, j))) for j, node in enumerate(row))):
                 yield ''.join(strs)
+
+    @property
+    def _display_grid(self):
+        display_grid = self.grid + [[Node.wall(Dirs.UP) for _ in range(self._shape[1])]]
+        display_grid = [row + [Node.wall(Dirs.LEFT)] for row in display_grid]
+        display_grid[self._shape[0]][self._shape[1]].dirs |= Dirs.ALL
+        return display_grid
 
     def _get_neighbors(self, node_indices):
         def get_neighbor(i_, j_):
@@ -68,6 +75,8 @@ class Laby:
                 wall_dirs |= Dirs.LEFT
 
             if wall_dirs:
+                if wall_dirs & Dirs.H and wall_dirs & Dirs.V:
+                    wall_dirs &= Dirs.NONE
                 return Node.wall(wall_dirs)
 
             return self.grid[i_][j_]
@@ -115,10 +124,11 @@ class Node:
 
     @classmethod
     def wall(cls, wall_dirs):
-        return cls(~wall_dirs)
+        return cls(~wall_dirs, is_wall=True)
 
-    def __init__(self, dirs: Dirs):
+    def __init__(self, dirs: Dirs, is_wall: bool = False):
         self.dirs = dirs
+        self._is_wall = is_wall
 
     def __str__(self) -> str:
         return '\n'.join(self.strs())
@@ -173,6 +183,8 @@ class Node:
                 (self.dirs & neighbor_dir or not neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
                 and (not self.dirs & neighbor_dir or neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
             )
+        if self._is_wall:
+            return
 
         for dir_ in Dirs.seq():
             if not check_neighbor(dir_):
