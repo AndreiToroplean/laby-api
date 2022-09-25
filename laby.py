@@ -38,8 +38,8 @@ class Laby:
 
     @property
     def strs(self) -> Iterable[str]:
-        for i, row_nodes in enumerate(self.grid):
-            for strs in zip(*(node.strs(self._get_neighbors((i, j))) for j, node in enumerate(row_nodes))):
+        for i, row in enumerate(self.grid):
+            for strs in zip(*(node.strs(self._get_neighbors((i, j))) for j, node in enumerate(row))):
                 yield ''.join(strs)
 
     def _get_neighbors(self, node_indices):
