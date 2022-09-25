@@ -157,6 +157,9 @@ class Node:
         yield f'{Char.LRUD_CORNER}{Char.H_SPACE if Dirs.UP in self.dirs else Char.H_WALL}'
         yield f'{Char.V_SPACE if Dirs.LEFT in self.dirs else Char.V_WALL}{Char.H_SPACE}'
 
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.dirs})'
+
 
 class Dirs(enum.Flag):
     LEFT = enum.auto()
