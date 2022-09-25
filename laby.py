@@ -36,6 +36,29 @@ class Laby:
         self.grid = grid
         self._enforce_walls()
 
+        self._start = None
+        self._finish = None
+
+    @property
+    def start(self):
+        return self._start
+
+    @start.setter
+    def start(self, indices: Sequence[int]):
+        self._start = indices
+        i, j = indices
+        self.grid[i][j].label = "|-->"
+
+    @property
+    def finish(self):
+        return self._finish
+
+    @finish.setter
+    def finish(self, indices: Sequence[int]):
+        self._finish = indices
+        i, j = indices
+        self.grid[i][j].label = "-->|"
+
     def _enforce_walls(self):
         for i, row in enumerate(self.grid):
             for j, node in enumerate(row):
