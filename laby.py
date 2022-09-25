@@ -128,9 +128,9 @@ class Node:
 
             char = Char.CORNER[
                 (Dirs.NONE if neighbors[h_dir].dirs & v_dir else h_dir)
-                | (Dirs.NONE if neighbors[v_dir].dirs & ~v_dir else ~h_dir)
+                | (Dirs.NONE if neighbors[v_dir].dirs & v_dir.opposite() else h_dir.opposite())
                 | (Dirs.NONE if neighbors[v_dir].dirs & h_dir else v_dir)
-                | (Dirs.NONE if neighbors[h_dir].dirs & ~h_dir else ~v_dir)
+                | (Dirs.NONE if neighbors[h_dir].dirs & h_dir.opposite() else v_dir.opposite())
             ]
             return char
 
@@ -157,8 +157,8 @@ class Node:
     def _check_neighbors(self, neighbors: dict[Dirs, Node]):
         def check_neighbor(neighbor_dir: Dirs) -> bool:
             return (
-                (self.dirs & neighbor_dir or not neighbors[neighbor_dir].dirs & ~neighbor_dir)
-                and (not self.dirs & neighbor_dir or neighbors[neighbor_dir].dirs & ~neighbor_dir)
+                (self.dirs & neighbor_dir or not neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
+                and (not self.dirs & neighbor_dir or neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
             )
 
         for dir_ in Dirs.seq():
@@ -186,11 +186,11 @@ class Dirs(enum.Flag):
     def seq():
         return Dirs.LEFT, Dirs.RIGHT, Dirs.UP, Dirs.DOWN
 
-    def __invert__(self):
+    def opposite(self):
         try:
-            return DIR_INVERSES[self]
+            return DIR_OPPOSITES[self]
         except KeyError as e:
-            raise NotImplementedError(f"Arbitrary Dirs compositions don't always have inverses.") from e
+            raise NotImplementedError(f"Arbitrary {self.__class__.__name__} compositions don't have opposites.") from e
 
 
 class SymmetricDict(dict):
@@ -199,13 +199,9 @@ class SymmetricDict(dict):
         self.update({v: k for k, v in self.items()})
 
 
-DIR_INVERSES = SymmetricDict({
+DIR_OPPOSITES = SymmetricDict({
     Dirs.LEFT: Dirs.RIGHT,
     Dirs.UP: Dirs.DOWN,
-
-    Dirs.H: Dirs.V,
-
-    Dirs.ALL: Dirs.NONE,
 })
 
 
