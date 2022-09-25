@@ -6,21 +6,22 @@ from utils import Dirs, Char
 
 class Node:
     @classmethod
-    def zero(cls):
-        return cls(Dirs.NONE)
+    def zero(cls, *args, **kwargs):
+        return cls(Dirs.NONE, *args, **kwargs)
 
     @classmethod
-    def one(cls):
-        return cls(Dirs.ALL)
+    def one(cls, *args, **kwargs):
+        return cls(Dirs.ALL, *args, **kwargs)
 
     @classmethod
-    def wall(cls, wall_dirs):
-        node = cls(~wall_dirs)
+    def wall(cls, wall_dirs, *args, **kwargs):
+        node = cls(~wall_dirs, *args, **kwargs)
         node._is_wall = True
         return node
 
-    def __init__(self, dirs: Dirs):
+    def __init__(self, dirs: Dirs, label: str | None = None):
         self.dirs = dirs
+        self.label = label
         self._is_wall = False
 
     def __str__(self) -> str:
@@ -50,6 +51,13 @@ class Node:
             ]
             return char
 
+        def get_label() -> str:
+            if self.label is None:
+                return Char.H_SPACE
+
+            h_len = len(Char.H_SPACE)
+            return self.label[:h_len] + ' ' * (max(h_len - len(self.label), 0))
+
         self._check_neighbors(neighbors)
         strs_seqs = [
             [
@@ -59,7 +67,7 @@ class Node:
             ],
             [
                 Char.V_SPACE if self.dirs & Dirs.LEFT else Char.V_WALL,
-                Char.H_SPACE,
+                get_label(),
                 Char.V_SPACE if self.dirs & Dirs.RIGHT else Char.V_WALL,
             ],
             [
