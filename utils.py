@@ -37,10 +37,10 @@ DIR_OPPOSITES = SymmetricDict({
 
 
 class Char:
-    H_SIZE = 4
+    _H_LEN = 4
 
-    H_SPACE = ' ' * H_SIZE
-    H_WALL = '─' * H_SIZE
+    H_SPACE = ' ' * _H_LEN
+    H_WALL = '─' * _H_LEN
     V_SPACE = ' '
     V_WALL = '│'
 
