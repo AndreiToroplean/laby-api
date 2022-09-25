@@ -32,6 +32,19 @@ class Laby:
 
     def __init__(self, grid: Sequence[Sequence]):
         self.grid = grid
+        self._enforce_walls()
+
+    def _enforce_walls(self):
+        for i, row in enumerate(self.grid):
+            for j, node in enumerate(row):
+                if i == 0:
+                    node.dirs &= ~Dirs.UP
+                if i == self._shape[0] - 1:
+                    node.dirs &= ~Dirs.DOWN
+                if j == 0:
+                    node.dirs &= ~Dirs.LEFT
+                if j == self._shape[1] - 1:
+                    node.dirs &= ~Dirs.RIGHT
 
     def __str__(self) -> str:
         return '\n'.join(self.strs)
