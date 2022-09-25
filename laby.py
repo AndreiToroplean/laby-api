@@ -89,19 +89,7 @@ class Node:
 
     @classmethod
     def wall(cls, wall_dirs):
-        dirs = Dirs.NONE
-        n_walls = 0
-        for dir_ in Dirs.seq():
-            if not wall_dirs & dir_:
-                dirs |= dir_
-            else:
-                n_walls += 1
-
-        if n_walls == 2:
-            # Node is outside a corner.
-            return cls.all()
-
-        return cls(dirs)
+        return cls(~wall_dirs)
 
     def __init__(self, dirs: Dirs | None = None):
         dirs = dirs or Dirs.NONE
