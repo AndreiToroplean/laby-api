@@ -10,14 +10,14 @@ from typing import Any
 class Laby:
     @classmethod
     def zeros(cls, shape: Sequence[int]):
-        return cls.full(shape)
+        return cls.full(shape, lambda: Node.zero())
 
     @classmethod
     def ones(cls, shape: Sequence[int]):
-        return cls.full(shape, Node(Dirs.ALL))
+        return cls.full(shape, lambda: Node.one())
 
     @classmethod
-    def full(cls, shape: Sequence[int], fill_value: Callable[[], Any] | Any = None):
+    def full(cls, shape: Sequence[int], fill_value: Callable[[], Any] | Any):
         def get_grid(shape_, fill_value_):
             if not shape_:
                 try:
@@ -28,7 +28,6 @@ class Laby:
             dim, *shape_ = shape_
             return [get_grid(shape_, fill_value_) for _ in range(dim)]
 
-        fill_value = fill_value or Node()
         return cls(get_grid(shape, fill_value))
 
     def __init__(self, grid: Sequence[Sequence]):
@@ -107,15 +106,18 @@ class Laby:
 
 class Node:
     @classmethod
-    def all(cls):
+    def zero(cls):
+        return cls(Dirs.NONE)
+
+    @classmethod
+    def one(cls):
         return cls(Dirs.ALL)
 
     @classmethod
     def wall(cls, wall_dirs):
         return cls(~wall_dirs)
 
-    def __init__(self, dirs: Dirs | None = None):
-        dirs = dirs or Dirs.NONE
+    def __init__(self, dirs: Dirs):
         self.dirs = dirs
 
     def __str__(self) -> str:
