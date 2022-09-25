@@ -31,7 +31,7 @@ class Node:
         return (''.join(strs[:-1]) for strs in self._strs_seqs(neighbors)[:-1])
 
     def _strs_seqs(self, neighbors: dict[Dirs, Node]) -> Sequence[Sequence[str]]:
-        def corner_char(corner_dir: Dirs) -> str:
+        def get_corner_char(corner_dir: Dirs) -> str:
             h_dir = corner_dir & Dirs.H
             v_dir = corner_dir & Dirs.V
 
@@ -51,9 +51,9 @@ class Node:
         self._check_neighbors(neighbors)
         strs_seqs = [
             [
-                corner_char(Dirs.LEFT | Dirs.UP),
+                get_corner_char(Dirs.LEFT | Dirs.UP),
                 Char.H_SPACE if self.dirs & Dirs.UP else Char.H_WALL,
-                corner_char(Dirs.RIGHT | Dirs.UP),
+                get_corner_char(Dirs.RIGHT | Dirs.UP),
             ],
             [
                 Char.V_SPACE if self.dirs & Dirs.LEFT else Char.V_WALL,
@@ -61,9 +61,9 @@ class Node:
                 Char.V_SPACE if self.dirs & Dirs.RIGHT else Char.V_WALL,
             ],
             [
-                corner_char(Dirs.LEFT | Dirs.DOWN),
+                get_corner_char(Dirs.LEFT | Dirs.DOWN),
                 Char.H_SPACE if self.dirs & Dirs.DOWN else Char.H_WALL,
-                corner_char(Dirs.RIGHT | Dirs.DOWN),
+                get_corner_char(Dirs.RIGHT | Dirs.DOWN),
             ],
         ]
         return strs_seqs
