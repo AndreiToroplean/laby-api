@@ -77,7 +77,7 @@ class Laby:
     @property
     def strs(self) -> Iterable[str]:
         for i, row in enumerate(self._display_grid):
-            for strs in zip(*(node.strs(self._get_neighbors((i, j))) for j, node in enumerate(row))):
+            for strs in zip(*(node.strs(self._get_neighbors(i, j)) for j, node in enumerate(row))):
                 yield ''.join(strs)
 
     @property
@@ -87,7 +87,7 @@ class Laby:
         display_grid[self._shape[0]][self._shape[1]].dirs |= Dirs.ALL
         return display_grid
 
-    def _get_neighbors(self, node_indices):
+    def _get_neighbors(self, i, j):
         def get_neighbor(i_, j_):
             wall_dirs = Dirs.NONE
             if i_ < 0:
@@ -107,7 +107,6 @@ class Laby:
             return self.grid[i_][j_]
 
         max_i, max_j = self._shape
-        i, j = node_indices
         return {
             Dirs.LEFT: get_neighbor(i, j-1),
             Dirs.RIGHT: get_neighbor(i, j+1),
