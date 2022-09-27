@@ -117,15 +117,15 @@ class Laby:
     @property
     @cache
     def _shape(self):
-        def f(grid):
+        def get_shape(grid):
             try:
                 sub_grid = grid[0]
             except TypeError:
                 return ()
 
-            return len(grid), *f(sub_grid)
+            return len(grid), *get_shape(sub_grid)
 
-        return f(self.grid)
+        return get_shape(self.grid)
 
     def __repr__(self):
         node_repr_lines = pformat(self.grid).splitlines()
