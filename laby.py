@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence, Callable, Iterable
-from functools import cache
+from functools import cache, cached_property
 from pprint import pformat
 from typing import Any
 
@@ -87,6 +87,7 @@ class Laby:
         display_grid[self._shape[0]][self._shape[1]].dirs |= Dirs.ALL
         return display_grid
 
+    @cache
     def _get_neighbors(self, i: int, j: int) -> dict[Dirs, Node]:
         def get_neighbor(i_: int, j_: int) -> Node:
             wall_dirs = Dirs.NONE
@@ -114,8 +115,7 @@ class Laby:
             Dirs.DOWN: get_neighbor(i+1, j),
         }
 
-    @property
-    @cache
+    @cached_property
     def _shape(self) -> tuple[int, ...]:
         def get_shape(grid) -> tuple[int, ...]:
             try:
