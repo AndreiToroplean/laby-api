@@ -40,21 +40,21 @@ class Laby:
         self._finish = None
 
     @property
-    def start(self):
+    def start(self) -> Sequence[int, int]:
         return self._start
 
     @start.setter
-    def start(self, indices: Sequence[int]):
+    def start(self, indices: Sequence[int, int]):
         self._start = indices
         i, j = indices
         self.grid[i][j].label = "|-->"
 
     @property
-    def finish(self):
+    def finish(self) -> Sequence[int, int]:
         return self._finish
 
     @finish.setter
-    def finish(self, indices: Sequence[int]):
+    def finish(self, indices: Sequence[int, int]):
         self._finish = indices
         i, j = indices
         self.grid[i][j].label = "-->|"
@@ -81,14 +81,14 @@ class Laby:
                 yield ''.join(strs)
 
     @property
-    def _display_grid(self):
+    def _display_grid(self) -> list[list[Node]]:
         display_grid = self.grid + [[Node.wall(Dirs.UP) for _ in range(self._shape[1])]]
         display_grid = [row + [Node.wall(Dirs.LEFT)] for row in display_grid]
         display_grid[self._shape[0]][self._shape[1]].dirs |= Dirs.ALL
         return display_grid
 
-    def _get_neighbors(self, i, j):
-        def get_neighbor(i_, j_):
+    def _get_neighbors(self, i: int, j: int) -> dict[Dirs, Node]:
+        def get_neighbor(i_: int, j_: int) -> Node:
             wall_dirs = Dirs.NONE
             if i_ < 0:
                 wall_dirs |= Dirs.DOWN
@@ -116,8 +116,8 @@ class Laby:
 
     @property
     @cache
-    def _shape(self):
-        def get_shape(grid):
+    def _shape(self) -> tuple[int, ...]:
+        def get_shape(grid) -> tuple[int, ...]:
             try:
                 sub_grid = grid[0]
             except TypeError:
@@ -127,7 +127,7 @@ class Laby:
 
         return get_shape(self.grid)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         node_repr_lines = pformat(self.grid).splitlines()
         if len(node_repr_lines) == 1:
             nodes_repr, = node_repr_lines
