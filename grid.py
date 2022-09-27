@@ -46,3 +46,6 @@ class Grid(list):
         return item.__getitem__(indices)
 
     append = None
+
+    def __add__(self, other):
+        return self.__class__(super().__add__(other))
