@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Sequence, Union
 
+from utils import GetIndices, SetIndices
+
 _GridValue = Sequence[Union[Any, '_GridValue']]
 
 
@@ -26,7 +28,7 @@ class Grid(list):
     def __repr__(self):
         return f'{self.__class__.__name__}({super().__repr__()})'
 
-    def __setitem__(self, index: Sequence[int, ...] | int, item: _GridValue | Any):
+    def __setitem__(self, index: SetIndices, item: _GridValue | Any):
         try:
             index, *indices = index
         except TypeError:
@@ -41,7 +43,7 @@ class Grid(list):
 
         self.__getitem__(index).__setitem__(indices, item)
 
-    def __getitem__(self, index: Sequence[int | slice, ...] | int | slice) -> _GridValue | Any:
+    def __getitem__(self, index: GetIndices) -> _GridValue | Any:
         try:
             index, *indices = index
         except TypeError:
