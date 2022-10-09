@@ -55,7 +55,10 @@ class Grid(list):
 
         return item.__getitem__(indices)
 
-    append = None
+    def append(self, item: _GridValue | Any):
+        if isinstance(item, Sequence) and not isinstance(item, self.__class__):
+            item = self.__class__(item)
+        super().append(item)
 
     def __add__(self, other):
         return self.__class__(super().__add__(other))
