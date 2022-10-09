@@ -5,6 +5,7 @@ from functools import cache, cached_property
 from pprint import pformat
 from typing import Any
 
+from grid import Grid
 from node import Node
 from utils import Dirs
 
@@ -30,9 +31,9 @@ class Laby:
             dim, *shape_ = shape_
             return [get_grid(shape_, fill_value_) for _ in range(dim)]
 
-        return cls(get_grid(shape, fill_value))
+        return cls(Grid(get_grid(shape, fill_value)))
 
-    def __init__(self, grid: list[list[Node]]):
+    def __init__(self, grid: Grid[Grid[Node]]):
         self.grid = grid
         self._enforce_walls()
 
@@ -46,8 +47,7 @@ class Laby:
     @start.setter
     def start(self, indices: Sequence[int, int]):
         self._start = indices
-        i, j = indices
-        self.grid[i][j].label = "|-->"
+        self.grid[indices].label = "|-->"
 
     @property
     def finish(self) -> Sequence[int, int]:
@@ -56,8 +56,7 @@ class Laby:
     @finish.setter
     def finish(self, indices: Sequence[int, int]):
         self._finish = indices
-        i, j = indices
-        self.grid[i][j].label = "-->|"
+        self.grid[indices].label = "-->|"
 
     def _enforce_walls(self):
         for i, row in enumerate(self.grid):
@@ -81,10 +80,10 @@ class Laby:
                 yield ''.join(strs)
 
     @property
-    def _display_grid(self) -> list[list[Node]]:
+    def _display_grid(self) -> Grid[Grid[Node]]:
         display_grid = self.grid + [[Node.wall(Dirs.UP) for _ in range(self._shape[1])]]
-        display_grid = [row + [Node.wall(Dirs.LEFT)] for row in display_grid]
-        display_grid[self._shape[0]][self._shape[1]].dirs |= Dirs.ALL
+        display_grid = Grid([row + [Node.wall(Dirs.LEFT)] for row in display_grid])
+        display_grid[self._shape].dirs |= Dirs.ALL
         return display_grid
 
     @cache
@@ -105,7 +104,7 @@ class Laby:
                     wall_dirs &= Dirs.NONE
                 return Node.wall(wall_dirs)
 
-            return self.grid[i_][j_]
+            return self.grid[i_, j_]
 
         max_i, max_j = self._shape
         return {
