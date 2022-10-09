@@ -44,22 +44,22 @@ class Laby:
         self._finish = None
 
     @property
-    def start(self) -> Sequence[int, int]:
+    def start(self) -> tuple[int, int]:
         return self._start
 
     @start.setter
     def start(self, indices: Sequence[int, int]):
-        self._start = indices
-        self.grid[indices].label = "|-->"
+        self._start = tuple(indices)
+        self.grid[self._start].label = "|-->"
 
     @property
-    def finish(self) -> Sequence[int, int]:
+    def finish(self) -> tuple[int, int]:
         return self._finish
 
     @finish.setter
     def finish(self, indices: Sequence[int, int]):
-        self._finish = indices
-        self.grid[indices].label = "-->|"
+        self._finish = tuple(indices)
+        self.grid[self._finish].label = "-->|"
 
     def _enforce_walls(self):
         for i, row in enumerate(self.grid):
