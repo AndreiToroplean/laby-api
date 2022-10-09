@@ -8,10 +8,19 @@ _GridValue = Sequence[Union[Any, '_GridValue']]
 class Grid(list):
     def __init__(self, value: _GridValue):
         try:
-            value = [self.__class__(sub_value) for sub_value in value]
-        except TypeError:
-            pass
+            first_item = value[0]
+        except IndexError:
+            super().__init__(value)
+            return
 
+        if not all(type(item) is type(first_item) for item in value):
+            raise TypeError('Inconsistent types in given Grid value.')
+
+        if isinstance(first_item, self.__class__) or not isinstance(first_item, Sequence):
+            super().__init__(value)
+            return
+
+        value = [self.__class__(item) for item in value]
         super().__init__(value)
 
     def __repr__(self):
