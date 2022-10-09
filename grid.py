@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from typing import Sequence, Any
+from typing import Any, Sequence, Union
+
+_GridValue = Sequence[Union[Any, '_GridValue']]
 
 
 class Grid(list):
-    def __init__(self, value: Sequence[Sequence, ...]):
+    def __init__(self, value: _GridValue):
         try:
             value = [self.__class__(sub_value) for sub_value in value]
         except TypeError:
@@ -15,7 +17,7 @@ class Grid(list):
     def __repr__(self):
         return f'{self.__class__.__name__}({super().__repr__()})'
 
-    def __setitem__(self, key: Sequence[int, ...] | int, value: Grid | list | Any):
+    def __setitem__(self, key: Sequence[int, ...] | int, value: _GridValue | Any):
         try:
             index, *indices = key
         except TypeError:
@@ -30,7 +32,7 @@ class Grid(list):
 
         self.__getitem__(index).__setitem__(indices, value)
 
-    def __getitem__(self, key: Sequence[int | slice, ...] | int | slice) -> Grid | Any:
+    def __getitem__(self, key: Sequence[int | slice, ...] | int | slice) -> _GridValue | Any:
         try:
             index, *indices = key
         except TypeError:
