@@ -20,13 +20,16 @@ class Laby:
         return cls.full(shape, lambda: Node.one())
 
     @classmethod
-    def full(cls, shape: Sequence[int], fill_value: Callable[[], Any] | Any):
+    def full(cls, shape: Sequence[int], fill_value: Callable[[], Node] | Node | Any):
         def get_grid(shape_, fill_value_):
             if not shape_:
                 try:
                     return fill_value_()
                 except TypeError:
-                    return fill_value_
+                    if isinstance(fill_value_, Node):
+                        return fill_value_
+
+                    return Node(fill_value)
 
             dim, *shape_ = shape_
             return [get_grid(shape_, fill_value_) for _ in range(dim)]
