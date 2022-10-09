@@ -7,7 +7,7 @@ from typing import Any
 
 from grid import Grid
 from node import Node
-from utils import Dirs
+from utils import Dirs, SetIndices
 
 
 class Laby:
@@ -37,7 +37,7 @@ class Laby:
         return cls(Grid(get_grid(shape, fill_value)))
 
     def __init__(self, grid: Grid[Grid[Node]]):
-        self.grid = grid
+        self._grid = grid
         self._enforce_walls()
 
         self._start = None
@@ -50,7 +50,7 @@ class Laby:
     @start.setter
     def start(self, indices: Sequence[int, int]):
         self._start = tuple(indices)
-        self.grid[self._start].label = "|-->"
+        self._grid[self._start].label = "|-->"
 
     @property
     def finish(self) -> tuple[int, int]:
@@ -59,10 +59,17 @@ class Laby:
     @finish.setter
     def finish(self, indices: Sequence[int, int]):
         self._finish = tuple(indices)
-        self.grid[self._finish].label = "-->|"
+        self._grid[self._finish].label = "-->|"
+
+    def __getitem__(self, indices: SetIndices) -> Node:
+        node = self._grid[indices]
+        if not isinstance(node, Node):
+            raise IndexError('Not enough indices to get a specific Node (cannot get sub-grids).')
+
+        return node
 
     def _enforce_walls(self):
-        for i, row in enumerate(self.grid):
+        for i, row in enumerate(self._grid):
             for j, node in enumerate(row):
                 if i == 0:
                     node.dirs &= ~Dirs.UP
@@ -84,7 +91,7 @@ class Laby:
 
     @property
     def _display_grid(self) -> Grid[Grid[Node]]:
-        display_grid = self.grid + [[Node.wall(Dirs.UP) for _ in range(self._shape[1])]]
+        display_grid = self._grid + [[Node.wall(Dirs.UP) for _ in range(self._shape[1])]]
         display_grid = Grid([row + [Node.wall(Dirs.LEFT)] for row in display_grid])
         display_grid[self._shape].dirs |= Dirs.ALL
         return display_grid
@@ -107,7 +114,7 @@ class Laby:
                     wall_dirs &= Dirs.NONE
                 return Node.wall(wall_dirs)
 
-            return self.grid[i_, j_]
+            return self._grid[i_, j_]
 
         max_i, max_j = self._shape
         return {
@@ -127,10 +134,10 @@ class Laby:
 
             return len(grid), *get_shape(sub_grid)
 
-        return get_shape(self.grid)
+        return get_shape(self._grid)
 
     def __repr__(self) -> str:
-        node_repr_lines = pformat(self.grid).splitlines()
+        node_repr_lines = pformat(self._grid).splitlines()
         if len(node_repr_lines) == 1:
             nodes_repr, = node_repr_lines
         else:

@@ -1,4 +1,5 @@
 import enum
+from collections.abc import Sequence
 
 
 class Dirs(enum.Flag):
@@ -79,3 +80,8 @@ class Char:
         Dirs.LEFT | Dirs.UP | Dirs.DOWN: LUD_CORNER,
         Dirs.LEFT | Dirs.RIGHT | Dirs.UP | Dirs.DOWN: LRUD_CORNER,
     }
+
+
+# Types
+SetIndices = Sequence[int, ...] | int
+GetIndices = Sequence[int | slice, ...] | int | slice
