@@ -60,5 +60,7 @@ class Grid(list):
             item = self.__class__(item)
         super().append(item)
 
-    def __add__(self, other):
-        return self.__class__(super().__add__(other))
+    def __add__(self, other: Grid | Sequence):
+        if not isinstance(other, self.__class__):
+            other = self.__class__(other)
+        return super().__add__(other)
