@@ -8,7 +8,7 @@ _GridValue = Sequence[Union[Any, '_GridValue']]
 
 
 class Grid(list):
-    def __init__(self, value: _GridValue):
+    def __init__(self, value: _GridValue = ()):
         try:
             first_item = value[0]
         except IndexError:
