@@ -14,9 +14,9 @@ class Dirs(enum.Flag):
     ALL = H | V
     NONE = 0
 
-    @staticmethod
-    def seq():
-        return Dirs.LEFT, Dirs.RIGHT, Dirs.UP, Dirs.DOWN
+    @classmethod
+    def seq(cls):
+        return cls.LEFT, cls.RIGHT, cls.UP, cls.DOWN
 
     def opposite(self):
         try:
