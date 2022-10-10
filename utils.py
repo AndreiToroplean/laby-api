@@ -21,8 +21,8 @@ class Dirs(enum.Flag):
     def opposite(self):
         try:
             return _DIR_OPPOSITES[self]
-        except KeyError as e:
-            raise NotImplementedError(f"Arbitrary {self.__class__.__name__} compositions don't have opposites.") from e
+        except KeyError:
+            raise Exception(f"Arbitrary {self.__class__.__name__} compositions don't have opposites.") from None
 
 
 class SymmetricDict(dict):
