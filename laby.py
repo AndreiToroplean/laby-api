@@ -55,21 +55,21 @@ class Laby:
         self._finish = None
 
     @property
-    def start(self) -> tuple[int, int]:
+    def start(self) -> Head:
         return self._start
 
     @start.setter
     def start(self, indices: Sequence[int, int]):
-        self._start = tuple(indices)
+        self._start = self.Head(indices)
         self._grid[self._start].label = "|-->"
 
     @property
-    def finish(self) -> tuple[int, int]:
+    def finish(self) -> Head:
         return self._finish
 
     @finish.setter
     def finish(self, indices: Sequence[int, int]):
-        self._finish = tuple(indices)
+        self._finish = self.Head(indices)
         self._grid[self._finish].label = "-->|"
 
     def __getitem__(self, indices: SetIndices) -> Node:
