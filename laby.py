@@ -91,7 +91,7 @@ class Laby:
     @property
     def strs(self) -> Iterable[str]:
         for i, row in enumerate(self._display_grid):
-            for strs in zip(*(node.strs(self._get_neighbors(i, j)) for j, node in enumerate(row))):
+            for strs in zip(*(node.strs(self._get_neighbors((i, j)) for j, node in enumerate(row))):
                 yield ''.join(strs)
 
     @property
@@ -102,8 +102,9 @@ class Laby:
         return display_grid
 
     @cache
-    def _get_neighbors(self, i: int, j: int) -> dict[Dirs, Node]:
-        def get_neighbor(i_: int, j_: int) -> Node:
+    def _get_neighbors(self, indices: Sequence[int, int]) -> dict[Dirs, Node]:
+        def get_neighbor(indices_: Head) -> Node:
+            i_, j_ = indices_
             wall_dirs = Dirs.NONE
             if i_ < 0:
                 wall_dirs |= Dirs.DOWN
@@ -121,12 +122,13 @@ class Laby:
 
             return self._grid[i_, j_]
 
+        indices = self.Head(indices)
         max_i, max_j = self._shape
         return {
-            Dirs.LEFT: get_neighbor(i, j-1),
-            Dirs.RIGHT: get_neighbor(i, j+1),
-            Dirs.UP: get_neighbor(i-1, j),
-            Dirs.DOWN: get_neighbor(i+1, j),
+            Dirs.LEFT: get_neighbor(indices + Dirs.LEFT),
+            Dirs.RIGHT: get_neighbor(indices + Dirs.RIGHT),
+            Dirs.UP: get_neighbor(indices + Dirs.UP),
+            Dirs.DOWN: get_neighbor(indices + Dirs.DOWN),
         }
 
     @cached_property
