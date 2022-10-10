@@ -1,4 +1,5 @@
 import enum
+import random
 from collections.abc import Sequence
 
 
@@ -34,6 +35,13 @@ class Dirs(enum.Flag):
             return _DIR_OPPOSITES[self]
         except KeyError:
             raise Exception(f"Arbitrary {self.__class__.__name__} compositions don't have opposites.") from None
+
+    def choice(self):
+        members = list(self)
+        if not members:
+            return Dirs.NONE
+
+        return random.choice(members)
 
     def delta(self):
         try:
