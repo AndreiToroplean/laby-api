@@ -41,6 +41,13 @@ class Dirs(enum.Flag):
         except KeyError:
             raise Exception(f'Cannot get delta for an arbitrary {self.__class__.__name__} composition.') from None
 
+    def __iter__(self):
+        for dir_ in self.seq():
+            if not self & dir_:
+                continue
+
+            yield dir_
+
 
 class SymmetricDict(dict):
     def __init__(self, *args, **kwargs):
