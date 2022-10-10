@@ -191,6 +191,9 @@ class Laby:
         def __iadd__(self, dir_):
             return self.__add__(dir_)
 
+        def __repr__(self):
+            return f'{self.__class__.__name__}({super().__repr__()})'
+
 
 example_laby = Laby.from_letters(
     'r, ld, r, lr, ld, d\n'
