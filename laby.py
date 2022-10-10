@@ -37,6 +37,12 @@ class Laby:
         return cls(Grid(get_grid(shape, fill_value)))
 
     @classmethod
+    def from_letters(cls, letters_grid: str):
+        grid = Grid([[Node(Dirs.from_letters(letters.strip().lower())) for letters in row_letters.split(',')]
+                     for row_letters in letters_grid.splitlines()])
+        return cls(grid)
+
+    @classmethod
     def from_dirs(cls, dirs: Sequence[Sequence[Dirs]]):
         grid = Grid([[Node(dir_) for dir_ in dirs_row] for dirs_row in dirs])
         return cls(grid)
