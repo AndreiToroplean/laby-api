@@ -20,7 +20,7 @@ class Dirs(enum.Flag):
 
     def opposite(self):
         try:
-            return DIR_OPPOSITES[self]
+            return _DIR_OPPOSITES[self]
         except KeyError as e:
             raise NotImplementedError(f"Arbitrary {self.__class__.__name__} compositions don't have opposites.") from e
 
@@ -31,7 +31,7 @@ class SymmetricDict(dict):
         self.update({v: k for k, v in self.items()})
 
 
-DIR_OPPOSITES = SymmetricDict({
+_DIR_OPPOSITES = SymmetricDict({
     Dirs.LEFT: Dirs.RIGHT,
     Dirs.UP: Dirs.DOWN,
 })
