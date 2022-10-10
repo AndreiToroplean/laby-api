@@ -149,3 +149,14 @@ class Laby:
             nodes_repr = '\n'.join(f'  {line}' for line in node_repr_lines)
             nodes_repr = f'\n{nodes_repr}\n'
         return f'{self.__class__.__name__}({nodes_repr})'
+
+    class Head(list):
+        def __init__(self, indices: Sequence[int, int]):
+            super().__init__(indices)
+
+        def __add__(self, dir_):
+            delta = dir_.delta()
+            return self.__class__([self[0] + delta[0], self[1] + delta[1]])
+
+        def __iadd__(self, dir_):
+            return self.__add__(dir_)
