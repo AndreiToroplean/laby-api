@@ -15,6 +15,17 @@ class Dirs(enum.Flag):
     NONE = 0
 
     @classmethod
+    def from_letters(cls, letters: str):
+        dirs = cls.NONE
+        for letter in letters:
+            try:
+                dirs |= _LETTERS_TO_DIRS[letter]
+            except KeyError:
+                raise Exception(f'Wrong letter for {cls.__name__}: {letter !r}. '
+                                f'Possible choices are: {list(_LETTERS_TO_DIRS.keys())}.') from None
+        return dirs
+
+    @classmethod
     def seq(cls):
         return cls.LEFT, cls.RIGHT, cls.UP, cls.DOWN
 
@@ -35,6 +46,13 @@ _DIR_OPPOSITES = SymmetricDict({
     Dirs.LEFT: Dirs.RIGHT,
     Dirs.UP: Dirs.DOWN,
 })
+
+_LETTERS_TO_DIRS = {
+    'l': Dirs.LEFT,
+    'r': Dirs.RIGHT,
+    'u': Dirs.UP,
+    'd': Dirs.DOWN,
+}
 
 
 class Char:
