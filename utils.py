@@ -35,6 +35,12 @@ class Dirs(enum.Flag):
         except KeyError:
             raise Exception(f"Arbitrary {self.__class__.__name__} compositions don't have opposites.") from None
 
+    def delta(self):
+        try:
+            return _DIR_DELTAS[self]
+        except KeyError:
+            raise Exception(f'Cannot get delta for an arbitrary {self.__class__.__name__} composition.') from None
+
 
 class SymmetricDict(dict):
     def __init__(self, *args, **kwargs):
@@ -46,6 +52,13 @@ _DIR_OPPOSITES = SymmetricDict({
     Dirs.LEFT: Dirs.RIGHT,
     Dirs.UP: Dirs.DOWN,
 })
+
+_DIR_DELTAS = {
+    Dirs.LEFT: (0, -1),
+    Dirs.RIGHT: (0, 1),
+    Dirs.UP: (-1, 0),
+    Dirs.DOWN: (1, 0),
+}
 
 _LETTERS_TO_DIRS = {
     'l': Dirs.LEFT,
