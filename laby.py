@@ -91,8 +91,30 @@ class Laby:
     @property
     def strs(self) -> Iterable[str]:
         for i, row in enumerate(self._display_grid):
-            for strs in zip(*(node.strs(self._get_neighbors((i, j)) for j, node in enumerate(row))):
+            for strs in zip(*self._get_row_node_strs(i, row)):
                 yield ''.join(strs)
+
+    def _get_row_node_strs(self, i, row):
+        for j, node in enumerate(row):
+            indices = i, j
+            neighbors = self._get_neighbors(indices)
+            self._check_neighbors(self._display_grid[indices], neighbors)
+            yield node.strs(neighbors)
+
+    @staticmethod
+    def _check_neighbors(node, neighbors: dict[Dirs, Node]):
+        def check_neighbor(neighbor_dir: Dirs) -> bool:
+            return (
+                (node.dirs & neighbor_dir or not neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
+                and (not node.dirs & neighbor_dir or neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
+            )
+
+        if node._is_wall:
+            return
+
+        for dir_ in Dirs.seq():
+            if not check_neighbor(dir_):
+                raise Exception("Incompatible neighboring nodes.")
 
     @property
     def _display_grid(self) -> Grid[Grid[Node]]:

@@ -58,7 +58,6 @@ class Node:
             h_len = len(Char.H_SPACE)
             return self.label[:h_len] + ' ' * (max(h_len - len(self.label), 0))
 
-        self._check_neighbors(neighbors)
         strs_seqs = [
             [
                 get_corner_char(Dirs.LEFT | Dirs.UP),
@@ -77,19 +76,6 @@ class Node:
             ],
         ]
         return strs_seqs
-
-    def _check_neighbors(self, neighbors: dict[Dirs, Node]):
-        def check_neighbor(neighbor_dir: Dirs) -> bool:
-            return (
-                (self.dirs & neighbor_dir or not neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
-                and (not self.dirs & neighbor_dir or neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
-            )
-        if self._is_wall:
-            return
-
-        for dir_ in Dirs.seq():
-            if not check_neighbor(dir_):
-                raise Exception("Incompatible neighboring nodes.")
 
     def _basic_strs(self) -> Iterable[str]:
         yield f'{Char.LRUD_CORNER}{Char.H_SPACE if Dirs.UP in self.dirs else Char.H_WALL}'
