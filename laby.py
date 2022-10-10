@@ -36,6 +36,11 @@ class Laby:
 
         return cls(Grid(get_grid(shape, fill_value)))
 
+    @classmethod
+    def from_dirs(cls, dirs: Sequence[Sequence[Dirs]]):
+        grid = Grid([[Node(dir_) for dir_ in dirs_row] for dirs_row in dirs])
+        return cls(grid)
+
     def __init__(self, grid: Grid[Grid[Node]]):
         self._grid = grid
         self._enforce_walls()
