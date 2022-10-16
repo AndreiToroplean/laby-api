@@ -1,5 +1,3 @@
-from collections import namedtuple
-
 from laby import Laby
 from route import Route
 
@@ -27,9 +25,10 @@ def _find_route(laby):
             route = route.prev
             continue
 
-        choice = dirs_choices.choice()
-        next_route = Route(route.pos + choice)
-        route.next.append(_Next(choice, next_route))
+        next_dir = dirs_choices.choice()
+        next_route = Route(route.pos + next_dir)
+        route.next.append(next_route)
+        route.next_dirs.append(next_dir)
 
         prev_route = route
         route = next_route
@@ -40,8 +39,8 @@ def _find_route(laby):
 def _get_dirs_choices(laby, route):
     node = laby[route.pos]
     dirs_choices = node.dirs.copy()
-    for prev_next in route.next:
-        dirs_choices &= ~prev_next.dir
+    for old_next_dir in route.next_dirs:
+        dirs_choices &= ~old_next_dir
     for dir_ in dirs_choices.copy():
         if route.pos + dir_ in route.all_poss:
             dirs_choices &= ~dir_
@@ -54,7 +53,4 @@ def _mark_route(laby, route):
         if route is route.start:
             break
 
-        laby[route.pos].label = route.next[-1].dir.arrow()
-
-
-_Next = namedtuple('Next', ('dir', 'route'))
+        laby[route.pos].label = route.next_dirs[-1].arrow()
