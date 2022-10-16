@@ -54,21 +54,21 @@ class Laby:
         self._finish = None
 
     @property
-    def start(self) -> Head:
+    def start(self) -> Pos:
         return self._start
 
     @start.setter
     def start(self, indices: Sequence[int, int]):
-        self._start = self.Head(indices)
+        self._start = self.Pos(indices)
         self._grid[self._start].label = "|-->"
 
     @property
-    def finish(self) -> Head:
+    def finish(self) -> Pos:
         return self._finish
 
     @finish.setter
     def finish(self, indices: Sequence[int, int]):
-        self._finish = self.Head(indices)
+        self._finish = self.Pos(indices)
         self._grid[self._finish].label = "-->|"
 
     def __getitem__(self, indices: SetIndices) -> Node:
@@ -130,7 +130,7 @@ class Laby:
 
     @cache
     def _get_neighbors(self, indices: Sequence[int, int]) -> dict[Dirs, Node]:
-        def get_neighbor(indices_: Head) -> Node:
+        def get_neighbor(indices_: Pos) -> Node:
             i_, j_ = indices_
             wall_dirs = Dirs.NONE
             if i_ < 0:
@@ -149,7 +149,7 @@ class Laby:
 
             return self._grid[i_, j_]
 
-        indices = self.Head(indices)
+        indices = self.Pos(indices)
         max_i, max_j = self._shape
         return {
             Dirs.LEFT: get_neighbor(indices + Dirs.LEFT),
@@ -173,16 +173,13 @@ class Laby:
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self._grid})'
 
-    class Head(list):
-        def __init__(self, indices: Sequence[int, int]):
-            super().__init__(indices)
+    class Pos(tuple):
+        def __new__(cls, indices: Sequence[int, int]):
+            return ().__new__(cls, indices)
 
         def __add__(self, dir_):
             delta = dir_.delta()
             return self.__class__([self[0] + delta[0], self[1] + delta[1]])
-
-        def __iadd__(self, dir_):
-            return self.__add__(dir_)
 
         def __repr__(self):
             return f'{self.__class__.__name__}({super().__repr__()})'
