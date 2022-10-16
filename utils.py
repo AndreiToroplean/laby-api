@@ -36,6 +36,15 @@ class Dirs(enum.Flag):
         except KeyError:
             raise Exception(f"Arbitrary {self.__class__.__name__} compositions don't have opposites.") from None
 
+    def normal(self):
+        if self | Dirs.H == Dirs.H:
+            return Dirs.V
+
+        if self | Dirs.V == Dirs.V:
+            return Dirs.H
+
+        raise Exception(f"{self} doesn't have a normal.")
+
     def choice(self):
         members = list(self)
         if not members:
