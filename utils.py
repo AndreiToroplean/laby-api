@@ -9,11 +9,8 @@ class Dirs(enum.Flag):
     UP = enum.auto()
     DOWN = enum.auto()
 
-    H = LEFT | RIGHT
-    V = UP | DOWN
-
-    ALL = H | V
     NONE = 0
+    ALL = LEFT | RIGHT | UP | DOWN
 
     @classmethod
     def from_letters(cls, letters: str):
@@ -64,6 +61,11 @@ class Dirs(enum.Flag):
                 continue
 
             yield dir_
+
+
+# Additional regular class attributes
+Dirs.H = Dirs.LEFT | Dirs.RIGHT
+Dirs.V = Dirs.UP | Dirs.DOWN
 
 
 class DirsError(Exception):
