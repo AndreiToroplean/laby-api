@@ -19,7 +19,6 @@ def solve(laby):
 
 def _find_route(laby):
     route = Route(laby.start)
-    visited_poss = set()
     while route.pos != laby.finish:
         node = laby[route.pos]
         possible_dirs = node.dirs.copy()
@@ -27,7 +26,7 @@ def _find_route(laby):
             possible_dirs &= ~prev_next.dir
         possible_unvisited_dirs = Dirs.NONE
         for dir_ in possible_dirs:
-            if route.pos + dir_ not in visited_poss:
+            if route.pos + dir_ not in route.all_poss:
                 possible_unvisited_dirs |= dir_
         possible_dirs = possible_unvisited_dirs
         if not possible_dirs:
@@ -35,10 +34,8 @@ def _find_route(laby):
                 raise Exception('No solution!')
 
             route = route.prev
-            visited_poss.remove(route.pos)
             continue
 
-        visited_poss.add(route.pos)
         choice = possible_dirs.choice()
         next_route = Route(route.pos + choice)
         route.next.append(_Next(choice, next_route))
