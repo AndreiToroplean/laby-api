@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence, Iterable
-from utils import Char
+from char import Char
 from dirs import Dirs
 
 
