@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from collections.abc import Sequence, Callable, Iterable
 from functools import cache, cached_property
-from pprint import pformat
 from typing import Any
 
 from grid import Grid
@@ -172,13 +171,7 @@ class Laby:
         return get_shape(self._grid)
 
     def __repr__(self) -> str:
-        node_repr_lines = pformat(self._grid).splitlines()
-        if len(node_repr_lines) == 1:
-            nodes_repr, = node_repr_lines
-        else:
-            nodes_repr = '\n'.join(f'  {line}' for line in node_repr_lines)
-            nodes_repr = f'\n{nodes_repr}\n'
-        return f'{self.__class__.__name__}({nodes_repr})'
+        return f'{self.__class__.__name__}({self._grid})'
 
     class Head(list):
         def __init__(self, indices: Sequence[int, int]):

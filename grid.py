@@ -26,7 +26,21 @@ class Grid(list):
         super().__init__(value)
 
     def __repr__(self):
-        return f'{self.__class__.__name__}({super().__repr__()})'
+        def repr_class(list_repr=''):
+            return f'{self.__class__.__name__}({list_repr})'
+
+        try:
+            first_item = self[0]
+        except IndexError:
+            return repr_class()
+
+        if not isinstance(first_item, self.__class__):
+            return repr_class(super().__repr__())
+
+        repr_items = ['\n'.join([f'  {line}' for line in repr(item).splitlines()]) for item in self]
+        repr_items_str = ',\n'.join(repr_items)
+        repr_items_str = f'[\n{repr_items_str},\n]'
+        return repr_class(repr_items_str)
 
     def __setitem__(self, index: SetIndices, item: _GridValue | Any):
         try:
