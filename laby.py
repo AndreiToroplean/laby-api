@@ -6,7 +6,7 @@ from typing import Any
 
 from grid import Grid
 from node import Node
-from utils import Dirs, SetIndices
+from utils import Dirs, SetIndices, Pos
 
 
 class Laby:
@@ -59,7 +59,7 @@ class Laby:
 
     @start.setter
     def start(self, indices: Sequence[int, int]):
-        self._start = self.Pos(indices)
+        self._start = Pos(indices)
         self._grid[self._start].label = "|-->"
 
     @property
@@ -68,7 +68,7 @@ class Laby:
 
     @finish.setter
     def finish(self, indices: Sequence[int, int]):
-        self._finish = self.Pos(indices)
+        self._finish = Pos(indices)
         self._grid[self._finish].label = "-->|"
 
     def __getitem__(self, indices: SetIndices) -> Node:
@@ -149,7 +149,7 @@ class Laby:
 
             return self._grid[i_, j_]
 
-        indices = self.Pos(indices)
+        indices = Pos(indices)
         max_i, max_j = self._shape
         return {
             Dirs.LEFT: get_neighbor(indices + Dirs.LEFT),
@@ -172,17 +172,6 @@ class Laby:
 
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self._grid})'
-
-    class Pos(tuple):
-        def __new__(cls, indices: Sequence[int, int]):
-            return ().__new__(cls, indices)
-
-        def __add__(self, dir_):
-            delta = dir_.delta()
-            return self.__class__([self[0] + delta[0], self[1] + delta[1]])
-
-        def __repr__(self):
-            return f'{self.__class__.__name__}({super().__repr__()})'
 
 
 example_laby = Laby.from_letters(

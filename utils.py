@@ -98,6 +98,18 @@ _LETTERS_TO_DIRS = {
 }
 
 
+class Pos(tuple):
+    def __new__(cls, indices: Sequence[int, int]):
+        return ().__new__(cls, indices)
+
+    def __add__(self, dir_):
+        delta = dir_.delta()
+        return self.__class__([self[0] + delta[0], self[1] + delta[1]])
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}({super().__repr__()})'
+
+
 class Char:
     _H_LEN = 4
 
