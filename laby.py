@@ -6,7 +6,8 @@ from typing import Any
 
 from grid import Grid
 from node import Node
-from utils import Dirs, SetIndices, Pos
+from utils import SetIndices
+from dirs import Dirs, Pos
 
 
 class Laby:

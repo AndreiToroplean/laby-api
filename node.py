@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from collections.abc import Sequence, Iterable
-from utils import Dirs, Char
+from utils import Char
+from dirs import Dirs
 
 
 class Node:
