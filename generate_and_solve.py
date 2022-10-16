@@ -1,5 +1,5 @@
 from laby import Laby
-from route import Route
+from route import MultiRoute
 
 
 def generate_empty(shape):
@@ -15,7 +15,7 @@ def solve(laby):
 
 
 def _find_route(laby):
-    route = Route(laby.start)
+    route = MultiRoute(laby.start)
     while route.pos != laby.finish:
         dirs_choices = _get_dirs_choices(laby, route)
         if not dirs_choices:
@@ -26,7 +26,7 @@ def _find_route(laby):
             continue
 
         next_dir = dirs_choices.choice()
-        next_route = Route(route.pos + next_dir)
+        next_route = MultiRoute(route.pos + next_dir)
         route.next.append(next_route)
         route.next_dirs.append(next_dir)
 
