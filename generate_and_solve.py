@@ -51,7 +51,7 @@ def _get_dirs_choices(laby, route):
 def _mark_route(laby, route):
     while True:
         route = route.prev
-        if route.pos == laby.start:
+        if route is route.start:
             break
 
         laby[route.pos].label = route.next[-1].dir.arrow()

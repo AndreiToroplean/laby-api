@@ -23,3 +23,10 @@ class Route:
             return all_poss
 
         return all_poss.union(self.prev.all_poss)
+
+    @cached_property
+    def start(self):
+        if self.prev is None:
+            return self
+
+        return self.prev.start
