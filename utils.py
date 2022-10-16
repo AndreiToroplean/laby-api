@@ -22,7 +22,7 @@ class Dirs(enum.Flag):
             try:
                 dirs |= _LETTERS_TO_DIRS[letter]
             except KeyError:
-                raise Exception(f'Wrong letter for {cls.__name__}: {letter !r}. '
+                raise DirsError(f'Wrong letter for {cls.__name__}: {letter !r}. '
                                 f'Possible choices are: {list(_LETTERS_TO_DIRS.keys())}.') from None
         return dirs
 
@@ -34,7 +34,7 @@ class Dirs(enum.Flag):
         try:
             return _DIR_OPPOSITES[self]
         except KeyError:
-            raise Exception(f"Arbitrary {self.__class__.__name__} compositions don't have opposites.") from None
+            raise DirsError(f"Arbitrary {self.__class__.__name__} compositions don't have opposites.") from None
 
     def normal(self):
         if self | Dirs.H == Dirs.H:
@@ -43,7 +43,7 @@ class Dirs(enum.Flag):
         if self | Dirs.V == Dirs.V:
             return Dirs.H
 
-        raise Exception(f"{self} doesn't have a normal.")
+        raise DirsError(f"{self} doesn't have a normal.")
 
     def choice(self):
         members = list(self)
@@ -56,7 +56,7 @@ class Dirs(enum.Flag):
         try:
             return _DIR_DELTAS[self]
         except KeyError:
-            raise Exception(f'Cannot get delta for an arbitrary {self.__class__.__name__} composition.') from None
+            raise DirsError(f'Cannot get delta for an arbitrary {self.__class__.__name__} composition.') from None
 
     def __iter__(self):
         for dir_ in self.seq():
@@ -64,6 +64,10 @@ class Dirs(enum.Flag):
                 continue
 
             yield dir_
+
+
+class DirsError(Exception):
+    pass
 
 
 class SymmetricDict(dict):
