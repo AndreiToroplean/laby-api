@@ -20,7 +20,7 @@ def _find_route(laby):
         dirs_choices = _get_dirs_choices(laby, route)
         if not dirs_choices:
             if route.pos == laby.start:
-                raise Exception('No solution!')
+                raise RouteNotFoundError('No route could be found.')
 
             route = route.prev
             continue
@@ -34,6 +34,10 @@ def _find_route(laby):
         route = next_route
         route.prev = prev_route
     return route
+
+
+class RouteNotFoundError(Exception):
+    pass
 
 
 def _get_dirs_choices(laby, route):
