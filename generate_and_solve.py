@@ -2,6 +2,23 @@ from laby import Laby
 from route import MultiRoute
 
 
+def generate(shape):
+    laby = generate_empty(shape)
+    route = None
+    while True:
+        try:
+            route = _find_route(laby, route)
+        except RouteNotFoundError:
+            break
+
+        route.routes.append(route.prev)
+
+    for sub_route in route.routes:
+        _mark_route(laby, sub_route)
+
+    return laby
+
+
 def generate_empty(shape):
     laby = Laby.ones(shape)
     laby.start = (0, 0)
