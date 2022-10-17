@@ -14,8 +14,8 @@ def solve(laby):
     _mark_route(laby, route)
 
 
-def _find_route(laby):
-    route = MultiRoute(laby.start)
+def _find_route(laby, route=None):
+    route = route if route is not None else MultiRoute(laby.start)
     while route.pos != laby.finish:
         dirs_choices = _get_dirs_choices(laby, route)
         if not dirs_choices:
