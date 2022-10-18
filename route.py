@@ -32,6 +32,9 @@ class Route:
 
         return self.prev.start
 
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.pos}, {self.next_dirs})'
+
 
 class MultiRoute(Route):
     def __init__(self, pos):
