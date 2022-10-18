@@ -61,7 +61,7 @@ class Laby:
     @start.setter
     def start(self, indices: Sequence[int, int]):
         self._start = Pos(indices)
-        self._grid[self._start].label = "|-->"
+        self._grid[self._start].label = '←-→'
 
     @property
     def finish(self) -> Pos:
@@ -70,7 +70,7 @@ class Laby:
     @finish.setter
     def finish(self, indices: Sequence[int, int]):
         self._finish = Pos(indices)
-        self._grid[self._finish].label = "-->|"
+        self._grid[self._finish].label = '→-←'
 
     def __getitem__(self, indices: SetIndices) -> Node:
         node = self._grid[indices]
