@@ -10,12 +10,7 @@ class Route:
 
     @cache
     def __len__(self):
-        len_ = 0
-        route = self
-        while route is not None:
-            route = route.prev
-            len_ += 1
-        return len_
+        return len(list(iter(self)))
 
     @cached_property
     def all_poss(self):
@@ -31,6 +26,12 @@ class Route:
             return self
 
         return self.prev.start
+
+    def __iter__(self):
+        route = self
+        while route is not None:
+            yield route
+            route = route.prev
 
     def __repr__(self):
         return f'{self.__class__.__name__}({self.pos}, {self.next_dirs})'
