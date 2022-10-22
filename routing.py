@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections.abc import Iterable
 from functools import cache, cached_property
 
@@ -24,7 +26,7 @@ class Route:
         return all_poss.union(self.prev.all_poss)
 
     @cached_property
-    def start(self) -> 'Route':
+    def start(self) -> Route:
         if self.prev is None:
             return self
 
@@ -39,7 +41,7 @@ class Route:
         laby.write(self, do_walls=False)
         return str(laby)
 
-    def __iter__(self) -> Iterable['Route']:
+    def __iter__(self) -> Iterable[Route]:
         route = self
         while route is not None:
             yield route
