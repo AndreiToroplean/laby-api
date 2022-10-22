@@ -59,38 +59,38 @@ class MultiRoute(Route):
 
     @property
     def pos(self):
-        return self.route.pos
+        return self.head.pos
 
     @pos.setter
     def pos(self, pos):
-        self.route.pos = pos
+        self.head.pos = pos
 
     @property
     def next(self):
-        return self.route.next
+        return self.head.next
 
     @next.setter
     def next(self, next_):
-        self.route.next = next_
+        self.head.next = next_
 
     @property
     def next_dirs(self):
-        return self.route.next_dirs
+        return self.head.next_dirs
 
     @next_dirs.setter
     def next_dirs(self, next_dirs):
-        self.route.next_dirs = next_dirs
+        self.head.next_dirs = next_dirs
 
     @property
     def prev(self):
-        return self.route.prev
+        return self.head.prev
 
     @prev.setter
     def prev(self, prev):
-        self.route.prev = prev
+        self.head.prev = prev
 
     @property
-    def route(self):
+    def head(self):
         return self._routes[-1]
 
     def __len__(self):
