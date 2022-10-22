@@ -22,7 +22,7 @@ class Node:
 
     def __init__(self, dirs: Dirs):
         self.dirs = dirs
-        self.label = None
+        self.label = ''
         self._is_virtual = False
 
     def __str__(self) -> str:
@@ -68,11 +68,7 @@ class Node:
                 return Char.V_WALL if is_h else Char.H_WALL
 
         def get_center_char() -> str:
-            if self.label is None:
-                return Char.H_SPACE
-
-            h_len = len(Char.H_SPACE)
-            return self.label[:h_len] + ' ' * (max(h_len - len(self.label), 0))
+            return embedded(Char.H_SPACE, self.label)
 
         strs_seqs = [
             [
