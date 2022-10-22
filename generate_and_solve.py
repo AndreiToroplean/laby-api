@@ -1,8 +1,10 @@
+from collections.abc import Sequence
+
 from laby import Laby
 from routing import Router
 
 
-def generate(shape):
+def generate(shape: Sequence[int]) -> Laby:
     laby = generate_empty(shape)
     router = Router(pos=laby.start)
     while True:
@@ -17,14 +19,14 @@ def generate(shape):
     return laby
 
 
-def generate_empty(shape):
+def generate_empty(shape: Sequence[int]) -> Laby:
     laby = Laby.ones(shape)
     laby.start = (0, 0)
     laby.finish = (index - 1 for index in shape)
     return laby
 
 
-def solve(laby):
+def solve(laby: Laby):
     router = _find_route(laby)
     laby.write_route(router.route)
 
