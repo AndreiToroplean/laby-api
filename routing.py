@@ -91,6 +91,10 @@ class Router:
     def pos(self):
         return self.multi_route.head.pos
 
+    @property
+    def route(self):
+        return self.multi_route.head
+
     def backtrack(self):
         self.multi_route.head = self.multi_route.head.prev
 
@@ -102,6 +106,10 @@ class Router:
 
         self.multi_route.head = next_route
         self.multi_route.head.prev = current_route
+
+    @property
+    def is_on_main(self):
+        return self.multi_route.is_head_main
 
     def get_dirs_choices(self, initial_dirs_choices):
         dirs_choices = initial_dirs_choices.copy()
