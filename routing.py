@@ -35,7 +35,7 @@ class Route:
         rows, cols = zip(*self.all_poss)
         shape = (max(rows)+1, max(cols)+1)
         laby = Laby.ones(shape)
-        laby.write_route(self)
+        laby.write(self, do_walls=False)
         return str(laby)
 
     def __iter__(self) -> Iterable['Route']:
