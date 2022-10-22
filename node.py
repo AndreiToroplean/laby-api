@@ -35,6 +35,13 @@ class Node:
         return (''.join(strs[:-1]) for strs in self._strs_seqs(neighbors)[:-1])
 
     def _strs_seqs(self, neighbors: dict[Dirs, Node]) -> Sequence[Sequence[str]]:
+        def embedded(orig: str, label: str = None) -> str:
+            if len(label) > len(orig):
+                raise Exception("Can't embed label in shorter string.")
+
+            pos = round(len(orig)/2 - len(label)/2 - 0.1)
+            return f'{orig[:pos]}{label}{orig[pos+len(label):]}'
+
         def get_corner_char(corner_dir: Dirs) -> str:
             h_dir = corner_dir & Dirs.H
             v_dir = corner_dir & Dirs.V
