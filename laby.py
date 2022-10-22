@@ -91,15 +91,6 @@ class Laby:
                 if j == self._shape[1] - 1:
                     node.dirs &= ~Dirs.RIGHT
 
-    def wipe_labels(self):
-        for i, row in enumerate(self._grid):
-            for j, node in enumerate(row):
-                indices = Pos((i, j))
-                if self._start == indices or self._finish == indices:
-                    continue
-
-                self._grid[indices].label = None
-
     def __str__(self) -> str:
         return '\n'.join(self.strs)
 
