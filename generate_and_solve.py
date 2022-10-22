@@ -46,7 +46,7 @@ def _find_route(laby: Laby, router: Router = None) -> Router:
             if not router.is_on_main and has_advanced:
                 return router
 
-            router.backtrack()
+            router.backtrack(modify_dirs=has_advanced)
             continue
 
         has_advanced = True
