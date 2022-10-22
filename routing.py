@@ -46,7 +46,7 @@ class Route:
         return f'{self.__class__.__name__}({self.pos}, {self.next_dirs})'
 
 
-class MultiRoute(Route):
+class MultiRoute:
     def __init__(self, pos):
         route = Route(pos)
         self._routes = [route]
@@ -56,38 +56,6 @@ class MultiRoute(Route):
 
     def __iter__(self):
         return self._routes.__iter__()
-
-    @property
-    def pos(self):
-        return self.head.pos
-
-    @pos.setter
-    def pos(self, pos):
-        self.head.pos = pos
-
-    @property
-    def next(self):
-        return self.head.next
-
-    @next.setter
-    def next(self, next_):
-        self.head.next = next_
-
-    @property
-    def next_dirs(self):
-        return self.head.next_dirs
-
-    @next_dirs.setter
-    def next_dirs(self, next_dirs):
-        self.head.next_dirs = next_dirs
-
-    @property
-    def prev(self):
-        return self.head.prev
-
-    @prev.setter
-    def prev(self, prev):
-        self.head.prev = prev
 
     @property
     def head(self):
