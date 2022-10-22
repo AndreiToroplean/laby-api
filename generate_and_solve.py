@@ -1,5 +1,6 @@
 from collections.abc import Sequence
 
+from dirs import Dirs
 from laby import Laby
 from routing import Router, Route
 
@@ -13,8 +14,11 @@ def generate(shape: Sequence[int]) -> Laby:
         except RouteNotFoundError:
             break
 
-        laby.write_route(router.route)
         router.branch_routes()
+
+    laby.write_all_nodes(Dirs.NONE)
+    for route in router.multi_route:
+        laby.write(route)
 
     return laby
 
