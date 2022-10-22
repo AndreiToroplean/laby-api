@@ -96,11 +96,10 @@ class Laby:
     def write_route(self, route: Route):
         for route_point in route:
             node = self._grid[route_point.pos]
-            route_point_dirs = route_point.next_dirs
-            if not route_point_dirs:
+            if not route_point.dirs:
                 continue
 
-            node.route_dirs |= route_point_dirs[-1]
+            node.route_dirs |= route_point.dirs[-1]
 
     def __str__(self) -> str:
         return '\n'.join(self.strs)

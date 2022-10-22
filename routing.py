@@ -7,7 +7,7 @@ from dirs import Dirs, Pos
 class Route:
     def __init__(self, pos: Pos):
         self.pos = pos
-        self.next_dirs = []
+        self.dirs = []
         self.prev = None
 
     @cache
@@ -45,7 +45,7 @@ class Route:
             route = route.prev
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}({self.pos}, {self.next_dirs})'
+        return f'{self.__class__.__name__}({self.pos}, {self.dirs})'
 
 
 class MultiRoute:
@@ -103,7 +103,7 @@ class Router:
     def advance(self, next_dir: Dirs):
         current_route = self.multi_route.head
         next_route = Route(current_route.pos + next_dir)
-        self.multi_route.head.next_dirs.append(next_dir)
+        self.multi_route.head.dirs.append(next_dir)
 
         self.multi_route.head = next_route
         self.multi_route.head.prev = current_route
@@ -114,8 +114,8 @@ class Router:
 
     def get_dirs_choices(self, initial_dirs_choices: Dirs) -> Dirs:
         dirs_choices = initial_dirs_choices.copy()
-        for old_next_dir in self.multi_route.head.next_dirs:
-            dirs_choices &= ~old_next_dir
+        for already_chosen_dir in self.multi_route.head.dirs:
+            dirs_choices &= ~already_chosen_dir
         for dir_ in dirs_choices.copy():
             if self.pos + dir_ in self.multi_route.all_poss:
                 dirs_choices &= ~dir_
