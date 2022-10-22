@@ -4,6 +4,7 @@ from collections.abc import Sequence, Callable, Iterable
 from functools import cache, cached_property
 from typing import Any
 
+from char import Char
 from grid import Grid
 from node import Node
 from routing import Route
@@ -62,7 +63,7 @@ class Laby:
     @start.setter
     def start(self, indices: Sequence[int, int]):
         self._start = Pos(indices)
-        self._grid[self._start].label = '←-→'
+        self._grid[self._start].label = Char.START
 
     @property
     def finish(self) -> Pos:
@@ -71,7 +72,7 @@ class Laby:
     @finish.setter
     def finish(self, indices: Sequence[int, int]):
         self._finish = Pos(indices)
-        self._grid[self._finish].label = '→-←'
+        self._grid[self._finish].label = Char.FINISH
 
     def __getitem__(self, indices: SetIndices) -> Node:
         node = self._grid[indices]
