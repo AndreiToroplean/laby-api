@@ -11,9 +11,9 @@ def generate(shape):
         except RouteNotFoundError:
             break
 
-        route.routes.append(route.prev)
+        route.add_route(route.prev)
 
-    for sub_route in route.routes:
+    for sub_route in route:
         _mark_route(laby, sub_route)
 
     return laby

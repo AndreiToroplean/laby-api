@@ -49,7 +49,7 @@ class Route:
 class MultiRoute(Route):
     def __init__(self, pos):
         route = Route(pos)
-        self.routes = [route]
+        self._routes = [route]
 
     def add_route(self, route):
         self._routes.append(route)
@@ -91,17 +91,17 @@ class MultiRoute(Route):
 
     @property
     def route(self):
-        return self.routes[-1]
+        return self._routes[-1]
 
     def __len__(self):
         len_ = 0
-        for route in self.routes:
+        for route in self._routes:
             len_ += len(route)
         return len_
 
     @property
     def all_poss(self):
         all_poss = set()
-        for route in self.routes:
+        for route in self._routes:
             all_poss = all_poss.union(route.all_poss)
         return all_poss
