@@ -52,7 +52,15 @@ class Node:
             ]
             return char
 
-        def get_label() -> str:
+        def get_edge_char(edge_dir: Dirs) -> str:
+            is_empty = self.dirs & edge_dir
+            is_h = Dirs.H & edge_dir
+            if is_empty:
+                return Char.V_SPACE if is_h else Char.H_SPACE
+            else:
+                return Char.V_WALL if is_h else Char.H_WALL
+
+        def get_center_char() -> str:
             if self.label is None:
                 return Char.H_SPACE
 
@@ -62,17 +70,17 @@ class Node:
         strs_seqs = [
             [
                 get_corner_char(Dirs.LEFT | Dirs.UP),
-                Char.H_SPACE if self.dirs & Dirs.UP else Char.H_WALL,
+                get_edge_char(Dirs.UP),
                 get_corner_char(Dirs.RIGHT | Dirs.UP),
             ],
             [
-                Char.V_SPACE if self.dirs & Dirs.LEFT else Char.V_WALL,
-                get_label(),
-                Char.V_SPACE if self.dirs & Dirs.RIGHT else Char.V_WALL,
+                get_edge_char(Dirs.LEFT),
+                get_center_char(),
+                get_edge_char(Dirs.RIGHT),
             ],
             [
                 get_corner_char(Dirs.LEFT | Dirs.DOWN),
-                Char.H_SPACE if self.dirs & Dirs.DOWN else Char.H_WALL,
+                get_edge_char(Dirs.DOWN),
                 get_corner_char(Dirs.RIGHT | Dirs.DOWN),
             ],
         ]
