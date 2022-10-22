@@ -7,7 +7,6 @@ from dirs import Dirs, Pos
 class Route:
     def __init__(self, pos: Pos):
         self.pos = pos
-        self.next = []
         self.next_dirs = []
         self.prev = None
 
@@ -104,7 +103,6 @@ class Router:
     def advance(self, next_dir: Dirs):
         current_route = self.multi_route.head
         next_route = Route(current_route.pos + next_dir)
-        self.multi_route.head.next.append(next_route)
         self.multi_route.head.next_dirs.append(next_dir)
 
         self.multi_route.head = next_route
