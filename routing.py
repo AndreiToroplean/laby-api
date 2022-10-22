@@ -109,3 +109,36 @@ class MultiRoute(Route):
         for route in self._routes:
             all_poss = all_poss.union(route.all_poss)
         return all_poss
+
+
+class Router:
+    def __init__(self, pos):
+        self.multi_route = MultiRoute(pos)
+
+    @property
+    def pos(self):
+        return self.multi_route.head.pos
+
+    def backtrack(self):
+        self.multi_route.head = self.multi_route.head.prev
+
+    def advance(self, next_dir):
+        current_route = self.multi_route.head
+        next_route = Route(current_route.pos + next_dir)
+        self.multi_route.head.next.append(next_route)
+        self.multi_route.head.next_dirs.append(next_dir)
+
+        self.multi_route.head = next_route
+        self.multi_route.head.prev = current_route
+
+    def get_dirs_choices(self, initial_dirs_choices):
+        dirs_choices = initial_dirs_choices.copy()
+        for old_next_dir in self.multi_route.head.next_dirs:
+            dirs_choices &= ~old_next_dir
+        for dir_ in dirs_choices.copy():
+            if self.pos + dir_ in self.multi_route.all_poss:
+                dirs_choices &= ~dir_
+        return dirs_choices
+
+    def add_route(self):
+        self.multi_route.add_route(self.multi_route.head.prev)
