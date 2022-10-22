@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 
 from laby import Laby
-from routing import Router
+from routing import Router, Route
 
 
 def generate(shape: Sequence[int]) -> Laby:
@@ -26,9 +26,9 @@ def generate_empty(shape: Sequence[int]) -> Laby:
     return laby
 
 
-def solve(laby: Laby):
+def solve(laby: Laby) -> Route:
     router = _find_route(laby)
-    laby.write_route(router.route)
+    return router.route
 
 
 def _find_route(laby: Laby, router: Router = None) -> Router:
