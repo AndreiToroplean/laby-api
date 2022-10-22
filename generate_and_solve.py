@@ -11,7 +11,7 @@ def generate(shape):
         except RouteNotFoundError:
             break
 
-        router.add_route()
+        router.branch_routes()
 
     _mark_route(laby, router)
 

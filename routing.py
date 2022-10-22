@@ -108,5 +108,5 @@ class Router:
                 dirs_choices &= ~dir_
         return dirs_choices
 
-    def add_route(self):
+    def branch_routes(self):
         self.multi_route.add_route(self.multi_route.head.prev)
