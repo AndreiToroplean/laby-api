@@ -51,6 +51,12 @@ class MultiRoute(Route):
         route = Route(pos)
         self.routes = [route]
 
+    def add_route(self, route):
+        self._routes.append(route)
+
+    def __iter__(self):
+        return self._routes.__iter__()
+
     @property
     def pos(self):
         return self.route.pos
