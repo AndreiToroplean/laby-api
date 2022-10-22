@@ -1,20 +1,19 @@
 from laby import Laby
-from routing import MultiRoute
+from routing import Router
 
 
 def generate(shape):
     laby = generate_empty(shape)
-    route = None
+    router = Router(pos=laby.start)
     while True:
         try:
-            route = _find_route(laby, route)
+            router = _find_route(laby, router)
         except RouteNotFoundError:
             break
 
-        route.add_route(route.prev)
+        router.add_route()
 
-    for sub_route in route:
-        _mark_route(laby, sub_route)
+    _mark_route(laby, router)
 
     return laby
 
@@ -27,53 +26,34 @@ def generate_empty(shape):
 
 
 def solve(laby):
-    route = _find_route(laby)
-    _mark_route(laby, route)
+    router = _find_route(laby)
+    _mark_route(laby, router)
 
 
-def _find_route(laby, route=None):
-    route = route if route is not None else MultiRoute(laby.start)
-    while route.pos != laby.finish:
-        dirs_choices = _get_dirs_choices(laby, route)
+def _find_route(laby: Laby, router: Router = None) -> Router:
+    if router is None:
+        router = Router(pos=laby.start)
+
+    while router.pos != laby.finish:
+        initial_dirs_choices = laby[router.pos].dirs
+        dirs_choices = router.get_dirs_choices(initial_dirs_choices)
         if not dirs_choices:
-            if route.pos == laby.start:
+            if router.pos == laby.start:
                 raise RouteNotFoundError('No route could be found.')
 
-            route = route.prev
+            router.backtrack()
             continue
 
         next_dir = dirs_choices.choice()
-        next_route = MultiRoute(route.pos + next_dir)
-        route.next.append(next_route)
-        route.next_dirs.append(next_dir)
+        router.advance(next_dir)
 
-        prev_route = route
-        route = next_route
-        route.prev = prev_route
-    return route
+    return router
 
 
 class RouteNotFoundError(Exception):
     pass
 
 
-def _get_dirs_choices(laby, route):
-    node = laby[route.pos]
-    dirs_choices = node.dirs.copy()
-    for old_next_dir in route.next_dirs:
-        dirs_choices &= ~old_next_dir
-    for dir_ in dirs_choices.copy():
-        if route.pos + dir_ in route.all_poss:
-            dirs_choices &= ~dir_
-    return dirs_choices
-
-
-def _mark_route(laby, route):
-    while True:
-        route = route.prev
-        if route is route.start:
-            break
-
-        node = laby[route.pos]
-        route_dirs = route.next_dirs[-1]
-        node.route_dirs = route_dirs
+def _mark_route(laby, router):
+    for route in router.multi_route:
+        laby.write_route(route)
