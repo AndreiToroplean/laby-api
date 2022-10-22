@@ -6,6 +6,7 @@ from typing import Any
 
 from grid import Grid
 from node import Node
+from route import Route
 from utils import SetIndices
 from dirs import Dirs, Pos
 
@@ -90,6 +91,15 @@ class Laby:
                     node.dirs &= ~Dirs.LEFT
                 if j == self._shape[1] - 1:
                     node.dirs &= ~Dirs.RIGHT
+
+    def write_route(self, route: Route):
+        for route_point in route:
+            node = self._grid[route_point.pos]
+            route_point_dirs = route_point.next_dirs
+            if not route_point_dirs:
+                continue
+
+            node.route_dirs |= route_point_dirs[-1]
 
     def __str__(self) -> str:
         return '\n'.join(self.strs)
