@@ -22,6 +22,7 @@ class Node:
 
     def __init__(self, dirs: Dirs):
         self.dirs = dirs
+        self.route_dirs = Dirs.NONE
         self.label = ''
         self._is_virtual = False
 
@@ -35,11 +36,13 @@ class Node:
         return (''.join(strs[:-1]) for strs in self._strs_seqs(neighbors)[:-1])
 
     def _strs_seqs(self, neighbors: dict[Dirs, Node]) -> Sequence[Sequence[str]]:
+        bias = 0.1
+
         def embedded(orig: str, label: str = None) -> str:
             if len(label) > len(orig):
                 raise Exception("Can't embed label in shorter string.")
 
-            pos = round(len(orig)/2 - len(label)/2 - 0.1)
+            pos = round(len(orig) / 2 - len(label) / 2 - bias)
             return f'{orig[:pos]}{label}{orig[pos+len(label):]}'
 
         def get_corner_char(corner_dir: Dirs) -> str:
@@ -63,12 +66,32 @@ class Node:
             is_empty = self.dirs & edge_dir
             is_h = Dirs.H & edge_dir
             if is_empty:
-                return Char.V_SPACE if is_h else Char.H_SPACE
+                char = Char.V_SPACE if is_h else Char.H_SPACE
             else:
-                return Char.V_WALL if is_h else Char.H_WALL
+                char = Char.V_WALL if is_h else Char.H_WALL
+
+            edge_route_dirs = Dirs.NONE
+            if self.route_dirs & edge_dir or neighbors[edge_dir].route_dirs & edge_dir.opposite():
+                edge_route_dirs |= edge_dir | edge_dir.opposite()
+            if not is_empty:
+                edge_route_dirs |= edge_dir.normal()
+            label = Char.CORNER[edge_route_dirs]
+            return embedded(char, label)
 
         def get_center_char() -> str:
-            return embedded(Char.H_SPACE, self.label)
+            center_dirs = self.route_dirs.copy()
+            for dir_ in Dirs.seq():
+                if neighbors[dir_].route_dirs & dir_.opposite():
+                    center_dirs |= dir_
+
+            label = self.label if self.label else Char.CORNER[center_dirs]
+
+            char_left = Char.H_WALL if center_dirs & Dirs.LEFT else Char.H_SPACE
+            char_right = Char.H_WALL if center_dirs & Dirs.RIGHT else Char.H_SPACE
+            pos = round(len(Char.H_SPACE)/2 - bias)
+            char = f'{char_left[:pos]}{char_right[pos:]}'
+
+            return embedded(char, label)
 
         strs_seqs = [
             [
