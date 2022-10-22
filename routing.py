@@ -65,6 +65,10 @@ class MultiRoute:
     def head(self, route):
         self._routes[-1] = route
 
+    @property
+    def is_head_main(self):
+        return self.head is self._routes[0]
+
     def __len__(self):
         len_ = 0
         for route in self._routes:
