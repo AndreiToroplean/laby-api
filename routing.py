@@ -98,8 +98,10 @@ class Router:
     def route(self) -> Route:
         return self.multi_route.head
 
-    def backtrack(self):
+    def backtrack(self, *, modify_dirs=False):
         self.multi_route.head = self.multi_route.head.prev
+        if modify_dirs:
+            self.multi_route.head.old_dirs.append(self.multi_route.head.dirs.pop())
 
     def advance(self, next_dir: Dirs):
         current_route = self.multi_route.head
@@ -115,7 +117,7 @@ class Router:
 
     def get_dirs_choices(self, initial_dirs_choices: Dirs) -> Dirs:
         dirs_choices = initial_dirs_choices
-        for already_chosen_dir in self.multi_route.head.dirs:
+        for already_chosen_dir in self.multi_route.head.dirs + self.multi_route.head.old_dirs:
             dirs_choices &= ~already_chosen_dir
         for dir_ in dirs_choices:
             if self.pos + dir_ in self.multi_route.all_poss:
