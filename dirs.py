@@ -27,12 +27,6 @@ class Dirs(enum.Flag):
     def seq(cls):
         return cls.LEFT, cls.RIGHT, cls.UP, cls.DOWN
 
-    def copy(self):
-        dirs_copy = Dirs.NONE
-        for dir_ in self:
-            dirs_copy |= dir_
-        return dirs_copy
-
     def opposite(self):
         try:
             return _DIR_OPPOSITES[self]

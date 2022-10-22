@@ -113,10 +113,10 @@ class Router:
         return self.multi_route.is_head_main
 
     def get_dirs_choices(self, initial_dirs_choices: Dirs) -> Dirs:
-        dirs_choices = initial_dirs_choices.copy()
+        dirs_choices = initial_dirs_choices
         for already_chosen_dir in self.multi_route.head.dirs:
             dirs_choices &= ~already_chosen_dir
-        for dir_ in dirs_choices.copy():
+        for dir_ in dirs_choices:
             if self.pos + dir_ in self.multi_route.all_poss:
                 dirs_choices &= ~dir_
         return dirs_choices

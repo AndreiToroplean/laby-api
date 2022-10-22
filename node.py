@@ -79,7 +79,7 @@ class Node:
             return embedded(char, label)
 
         def get_center_char() -> str:
-            center_dirs = self.route_dirs.copy()
+            center_dirs = self.route_dirs
             for dir_ in Dirs.seq():
                 if neighbors[dir_].route_dirs & dir_.opposite():
                     center_dirs |= dir_
