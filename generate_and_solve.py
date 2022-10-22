@@ -74,4 +74,6 @@ def _mark_route(laby, route):
         if route is route.start:
             break
 
-        laby[route.pos].label = route.next_dirs[-1].arrow()
+        node = laby[route.pos]
+        route_dirs = route.next_dirs[-1]
+        node.route_dirs = route_dirs
