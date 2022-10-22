@@ -5,6 +5,16 @@ from laby import Laby
 from routing import Router, Route
 
 
+def main():
+    laby = generate((12, 16))
+    print(laby)
+    print()
+
+    route = solve(laby)
+    laby.write(route, do_walls=False)
+    print(laby)
+
+
 def generate(shape: Sequence[int]) -> Laby:
     laby = generate_empty(shape)
     router = Router(pos=laby.start)
@@ -62,3 +72,7 @@ def _find_route(laby: Laby, router: Router = None) -> Router:
 
 class RouteNotFoundError(Exception):
     pass
+
+
+if __name__ == '__main__':
+    main()
