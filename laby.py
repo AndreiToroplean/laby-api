@@ -93,6 +93,14 @@ class Laby:
                 if j == self._shape[1] - 1:
                     node.dirs &= ~Dirs.RIGHT
 
+    def write_all_nodes(self, dirs: Dirs, *, do_walls=True):
+        for row in self._grid:
+            for node in row:
+                if do_walls:
+                    node.dirs = dirs
+                else:
+                    node.route_dirs = dirs
+
     def write(self, route: Route, *, do_walls=True):
         for route_point in route:
             node = self._grid[route_point.pos]
