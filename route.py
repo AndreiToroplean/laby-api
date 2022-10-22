@@ -93,6 +93,10 @@ class MultiRoute(Route):
     def head(self):
         return self._routes[-1]
 
+    @head.setter
+    def head(self, route):
+        self._routes[-1] = route
+
     def __len__(self):
         len_ = 0
         for route in self._routes:
