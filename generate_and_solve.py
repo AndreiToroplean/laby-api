@@ -11,9 +11,8 @@ def generate(shape):
         except RouteNotFoundError:
             break
 
+        laby.write_route(router.route)
         router.branch_routes()
-
-    _mark_route(laby, router)
 
     return laby
 
@@ -27,7 +26,7 @@ def generate_empty(shape):
 
 def solve(laby):
     router = _find_route(laby)
-    _mark_route(laby, router)
+    laby.write_route(router.route)
 
 
 def _find_route(laby: Laby, router: Router = None) -> Router:
@@ -52,8 +51,3 @@ def _find_route(laby: Laby, router: Router = None) -> Router:
 
 class RouteNotFoundError(Exception):
     pass
-
-
-def _mark_route(laby, router):
-    for route in router.multi_route:
-        laby.write_route(route)
