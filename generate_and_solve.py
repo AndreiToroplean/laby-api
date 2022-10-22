@@ -1,5 +1,5 @@
 from laby import Laby
-from route import MultiRoute
+from routing import MultiRoute
 
 
 def generate(shape):

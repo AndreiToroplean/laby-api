@@ -6,7 +6,7 @@ from typing import Any
 
 from grid import Grid
 from node import Node
-from route import Route
+from routing import Route
 from utils import SetIndices
 from dirs import Dirs, Pos
 
