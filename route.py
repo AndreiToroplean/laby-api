@@ -27,6 +27,15 @@ class Route:
 
         return self.prev.start
 
+    def __str__(self):
+        from laby import Laby
+
+        rows, cols = zip(*self.all_poss)
+        shape = (max(rows)+1, max(cols)+1)
+        laby = Laby.ones(shape)
+        laby.write_route(self)
+        return str(laby)
+
     def __iter__(self):
         route = self
         while route is not None:
