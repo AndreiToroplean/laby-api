@@ -20,9 +20,9 @@ class Node:
         node._is_virtual = True
         return node
 
-    def __init__(self, dirs: Dirs, label: str | None = None):
+    def __init__(self, dirs: Dirs):
         self.dirs = dirs
-        self.label = label
+        self.label = None
         self._is_virtual = False
 
     def __str__(self) -> str:
