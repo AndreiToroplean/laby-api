@@ -8,6 +8,7 @@ class Route:
     def __init__(self, pos: Pos):
         self.pos = pos
         self.dirs = []
+        self.old_dirs = []
         self.prev = None
 
     @cache
