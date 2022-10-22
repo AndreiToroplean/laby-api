@@ -124,7 +124,7 @@ class Laby:
                 and (not node.dirs & neighbor_dir or neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
             )
 
-        if node._is_wall:
+        if node._is_virtual:
             return
 
         for dir_ in Dirs.seq():
@@ -133,8 +133,8 @@ class Laby:
 
     @property
     def _display_grid(self) -> Grid[Grid[Node]]:
-        display_grid = self._grid + [[Node.wall(Dirs.UP) for _ in range(self._shape[1])]]
-        display_grid = Grid([row + [Node.wall(Dirs.LEFT)] for row in display_grid])
+        display_grid = self._grid + [[Node.virtual(Dirs.UP) for _ in range(self._shape[1])]]
+        display_grid = Grid([row + [Node.virtual(Dirs.LEFT)] for row in display_grid])
         display_grid[self._shape].dirs |= Dirs.ALL
         return display_grid
 
@@ -155,7 +155,7 @@ class Laby:
             if wall_dirs:
                 if wall_dirs & Dirs.H and wall_dirs & Dirs.V:
                     wall_dirs &= Dirs.NONE
-                return Node.wall(wall_dirs)
+                return Node.virtual(wall_dirs)
 
             return self._grid[i_, j_]
 

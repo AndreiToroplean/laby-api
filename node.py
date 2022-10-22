@@ -15,15 +15,15 @@ class Node:
         return cls(Dirs.ALL, *args, **kwargs)
 
     @classmethod
-    def wall(cls, wall_dirs, *args, **kwargs):
+    def virtual(cls, wall_dirs, *args, **kwargs):
         node = cls(~wall_dirs, *args, **kwargs)
-        node._is_wall = True
+        node._is_virtual = True
         return node
 
     def __init__(self, dirs: Dirs, label: str | None = None):
         self.dirs = dirs
         self.label = label
-        self._is_wall = False
+        self._is_virtual = False
 
     def __str__(self) -> str:
         return '\n'.join(self.strs())
