@@ -65,16 +65,15 @@ class Node:
         def get_edge_char(edge_dir: Dirs) -> str:
             is_empty = self.dirs & edge_dir
             is_h = Dirs.H & edge_dir
-            if is_empty:
-                char = Char.V_SPACE if is_h else Char.H_SPACE
-            else:
+            if not is_empty:
                 char = Char.V_WALL if is_h else Char.H_WALL
+                return char
+
+            char = Char.V_SPACE if is_h else Char.H_SPACE
 
             edge_route_dirs = Dirs.NONE
             if self.route_dirs & edge_dir or neighbors[edge_dir].route_dirs & edge_dir.opposite():
                 edge_route_dirs |= edge_dir | edge_dir.opposite()
-            if not is_empty:
-                edge_route_dirs |= edge_dir.normal()
             label = Char.CORNER[edge_route_dirs]
             return embedded(char, label)
 
