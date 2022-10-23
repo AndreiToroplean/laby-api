@@ -5,7 +5,7 @@ from collections.abc import Callable
 from dirs import Dirs
 
 
-_H_LEN = 4
+_H_LEN = 5
 
 
 class _CharVariants(str):
