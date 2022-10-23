@@ -29,29 +29,29 @@ class _CharVariants(str):
 
 
 class Char:
-    START = '←┼→'
-    FINISH = '→┼←'
+    START = _CharVariants('←┼→')
+    FINISH = _CharVariants('→┼←')
 
     CORNER = {
-        Dirs.NONE: ' ',
-        Dirs.LEFT: '╴',
-        Dirs.RIGHT: '╶',
-        Dirs.UP: '╵',
-        Dirs.DOWN: '╷',
-        Dirs.LEFT | Dirs.RIGHT: '─',
-        Dirs.UP | Dirs.DOWN: '│',
-        Dirs.RIGHT | Dirs.DOWN: '┌',
-        Dirs.LEFT | Dirs.DOWN: '┐',
-        Dirs.RIGHT | Dirs.UP: '└',
-        Dirs.LEFT | Dirs.UP: '┘',
-        Dirs.LEFT | Dirs.RIGHT | Dirs.UP: '┴',
-        Dirs.LEFT | Dirs.RIGHT | Dirs.DOWN: '┬',
-        Dirs.RIGHT | Dirs.UP | Dirs.DOWN: '├',
-        Dirs.LEFT | Dirs.UP | Dirs.DOWN: '┤',
-        Dirs.LEFT | Dirs.RIGHT | Dirs.UP | Dirs.DOWN: '┼',
+        Dirs.NONE: _CharVariants(' ', ' '),
+        Dirs.LEFT: _CharVariants('╴', '╸'),
+        Dirs.RIGHT: _CharVariants('╶', '╺'),
+        Dirs.UP: _CharVariants('╵', '╹'),
+        Dirs.DOWN: _CharVariants('╷', '╻'),
+        Dirs.LEFT | Dirs.RIGHT: _CharVariants('─', '━'),
+        Dirs.UP | Dirs.DOWN: _CharVariants('│', '┃'),
+        Dirs.RIGHT | Dirs.DOWN: _CharVariants('┌', '┏'),
+        Dirs.LEFT | Dirs.DOWN: _CharVariants('┐', '┓'),
+        Dirs.RIGHT | Dirs.UP: _CharVariants('└', '┗'),
+        Dirs.LEFT | Dirs.UP: _CharVariants('┘', '┛'),
+        Dirs.LEFT | Dirs.RIGHT | Dirs.UP: _CharVariants('┴', '┻'),
+        Dirs.LEFT | Dirs.RIGHT | Dirs.DOWN: _CharVariants('┬', '┳'),
+        Dirs.RIGHT | Dirs.UP | Dirs.DOWN: _CharVariants('├', '┣'),
+        Dirs.LEFT | Dirs.UP | Dirs.DOWN: _CharVariants('┤', '┫'),
+        Dirs.LEFT | Dirs.RIGHT | Dirs.UP | Dirs.DOWN: _CharVariants('┼', '╋'),
     }
 
-    H_SPACE = CORNER[Dirs.NONE] * _H_LEN
-    H_WALL = CORNER[Dirs.H] * _H_LEN
+    H_SPACE = CORNER[Dirs.NONE].transform(lambda s: s * _H_LEN)
+    H_WALL = CORNER[Dirs.H].transform(lambda s: s * _H_LEN)
     V_SPACE = CORNER[Dirs.NONE]
     V_WALL = CORNER[Dirs.V]
