@@ -32,6 +32,13 @@ class Char:
     START = _CharVariants('←┼→')
     FINISH = _CharVariants('→┼←')
 
+    ARROW = {
+        Dirs.LEFT: '←',
+        Dirs.RIGHT: '→',
+        Dirs.UP: '↑',
+        Dirs.DOWN: '↓',
+    }
+
     CORNER = {
         Dirs.NONE: _CharVariants(' ', ' '),
         Dirs.LEFT: _CharVariants('╴', '╸'),
