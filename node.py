@@ -59,14 +59,14 @@ class Node:
                 | (Dirs.NONE if neighbors[v_dir].dirs & v_dir.opposite() else h_dir.opposite())
                 | (Dirs.NONE if neighbors[v_dir].dirs & h_dir else v_dir)
                 | (Dirs.NONE if neighbors[h_dir].dirs & h_dir.opposite() else v_dir.opposite())
-            ]
+            ].bold
             return char
 
         def get_edge_char(edge_dir: Dirs) -> str:
             is_empty = self.dirs & edge_dir
             is_h = Dirs.H & edge_dir
             if not is_empty:
-                char = Char.V_WALL if is_h else Char.H_WALL
+                char = (Char.V_WALL if is_h else Char.H_WALL).bold
                 return char
 
             char = Char.V_SPACE if is_h else Char.H_SPACE
