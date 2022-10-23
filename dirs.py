@@ -57,9 +57,6 @@ class Dirs(enum.Flag):
         except KeyError:
             raise DirsError(f'Cannot get delta for an arbitrary {self.__class__.__name__} composition.') from None
 
-    def arrow(self) -> str:
-        return _DIR_ARROWS[self]
-
     def __iter__(self) -> Iterable[Dirs]:
         for dir_ in self.seq():
             if not self & dir_:
@@ -95,12 +92,6 @@ _DIR_DELTAS = {
     Dirs.DOWN: (1, 0),
 }
 
-_DIR_ARROWS = {
-    Dirs.LEFT: '←',
-    Dirs.RIGHT: '→',
-    Dirs.UP: '↑',
-    Dirs.DOWN: '↓',
-}
 
 _LETTERS_TO_DIRS = {
     'l': Dirs.LEFT,
