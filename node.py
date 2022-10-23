@@ -72,9 +72,14 @@ class Node:
             char = Char.V_SPACE if is_h else Char.H_SPACE
 
             edge_route_dirs = Dirs.NONE
-            if self.route_dirs & edge_dir or neighbors[edge_dir].route_dirs & edge_dir.opposite():
+            neighbor_route_dirs = neighbors[edge_dir].route_dirs
+            if self.route_dirs & edge_dir or neighbor_route_dirs & edge_dir.opposite():
                 edge_route_dirs |= edge_dir | edge_dir.opposite()
-            label = Char.CORNER[edge_route_dirs]
+            if edge_route_dirs == Dirs.H or edge_route_dirs == Dirs.V:
+                arrow_dir = self.route_dirs if edge_route_dirs & self.route_dirs else neighbor_route_dirs
+                label = Char.ARROW[arrow_dir]
+            else:
+                label = Char.CORNER[edge_route_dirs]
             return embedded(char, label)
 
         def get_center_char() -> str:
