@@ -3,16 +3,12 @@ from __future__ import annotations
 from dirs import Dirs
 
 
-class Char:
-    _H_LEN = 4
+_H_LEN = 4
 
+
+class Char:
     START = '←┼→'
     FINISH = '→┼←'
-
-    H_SPACE = ' ' * _H_LEN
-    H_WALL = '─' * _H_LEN
-    V_SPACE = ' '
-    V_WALL = '│'
 
     CORNER = {
         Dirs.NONE: ' ',
@@ -32,3 +28,8 @@ class Char:
         Dirs.LEFT | Dirs.UP | Dirs.DOWN: '┤',
         Dirs.LEFT | Dirs.RIGHT | Dirs.UP | Dirs.DOWN: '┼',
     }
+
+    H_SPACE = CORNER[Dirs.NONE] * _H_LEN
+    H_WALL = CORNER[Dirs.H] * _H_LEN
+    V_SPACE = CORNER[Dirs.NONE]
+    V_WALL = CORNER[Dirs.V]
