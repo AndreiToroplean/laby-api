@@ -29,7 +29,7 @@ def generate(shape: Sequence[int]) -> Laby:
         router.branch_routes()
 
     laby.write_all_nodes(Dirs.NONE)
-    for route in router.multi_route:
+    for route in router:
         laby.write(route)
 
     return laby
@@ -44,7 +44,7 @@ def generate_empty(shape: Sequence[int]) -> Laby:
 
 def solve(laby: Laby) -> Route:
     router = _find_route(laby)
-    return router.route
+    return router.head
 
 
 def _find_route(laby: Laby, router: Router = None) -> Router:
@@ -59,7 +59,7 @@ def _find_route(laby: Laby, router: Router = None) -> Router:
             if router.pos == laby.start:
                 raise RouteNotFoundError('No route could be found.')
 
-            if not router.is_on_main and has_advanced:
+            if not router.is_head_main and has_advanced:
                 return router
 
             router.backtrack(modify_dirs=has_advanced)

@@ -88,43 +88,32 @@ class MultiRoute:
         return all_poss
 
 
-class Router:
-    def __init__(self, pos: Pos):
-        self.multi_route = MultiRoute(pos)
-
+class Router(MultiRoute):
     @property
     def pos(self) -> Pos:
-        return self.multi_route.head.pos
-
-    @property
-    def route(self) -> Route:
-        return self.multi_route.head
+        return self.head.pos
 
     def backtrack(self, *, modify_dirs=False):
-        self.multi_route.head = self.multi_route.head.prev
+        self.head = self.head.prev
         if modify_dirs:
-            self.multi_route.head.old_dirs.append(self.multi_route.head.dirs.pop())
+            self.head.old_dirs.append(self.head.dirs.pop())
 
     def advance(self, next_dir: Dirs):
-        current_route = self.multi_route.head
+        current_route = self.head
         next_route = Route(current_route.pos + next_dir)
-        self.multi_route.head.dirs.append(next_dir)
+        self.head.dirs.append(next_dir)
 
-        self.multi_route.head = next_route
-        self.multi_route.head.prev = current_route
-
-    @property
-    def is_on_main(self) -> bool:
-        return self.multi_route.is_head_main
+        self.head = next_route
+        self.head.prev = current_route
 
     def get_dirs_choices(self, initial_dirs_choices: Dirs) -> Dirs:
         dirs_choices = initial_dirs_choices
-        for already_chosen_dir in self.multi_route.head.dirs + self.multi_route.head.old_dirs:
+        for already_chosen_dir in self.head.dirs + self.head.old_dirs:
             dirs_choices &= ~already_chosen_dir
         for dir_ in dirs_choices:
-            if self.pos + dir_ in self.multi_route.all_poss:
+            if self.pos + dir_ in self.all_poss:
                 dirs_choices &= ~dir_
         return dirs_choices
 
     def branch_routes(self):
-        self.multi_route.add_route(self.multi_route.head.prev)
+        self.add_route(self.head.prev)
