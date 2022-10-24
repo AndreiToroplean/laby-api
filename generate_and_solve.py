@@ -52,11 +52,11 @@ def _find_route(laby: Laby, router: Router = None) -> Router:
         router = Router(pos=laby.start)
 
     has_advanced = False
-    while router.pos != laby.finish:
-        initial_dirs_choices = laby[router.pos].dirs
+    while router.head.pos != laby.finish:
+        initial_dirs_choices = laby[router.head.pos].dirs
         dirs_choices = router.get_dirs_choices(initial_dirs_choices)
         if not dirs_choices:
-            if router.pos == laby.start:
+            if router.head.pos == laby.start:
                 raise RouteNotFoundError('No route could be found.')
 
             if not router.is_head_main and has_advanced:

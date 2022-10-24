@@ -89,10 +89,6 @@ class MultiRoute:
 
 
 class Router(MultiRoute):
-    @property
-    def pos(self) -> Pos:
-        return self.head.pos
-
     def backtrack(self, *, modify_dirs=False):
         self.head = self.head.prev
         if modify_dirs:
@@ -111,7 +107,7 @@ class Router(MultiRoute):
         for already_chosen_dir in self.head.dirs + self.head.old_dirs:
             dirs_choices &= ~already_chosen_dir
         for dir_ in dirs_choices:
-            if self.pos + dir_ in self.all_poss:
+            if self.head.pos + dir_ in self.all_poss:
                 dirs_choices &= ~dir_
         return dirs_choices
 
