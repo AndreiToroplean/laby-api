@@ -74,9 +74,9 @@ class Router:
         self.head = next_route
         self.head.prev = current_route
 
-    def backtrack(self, *, modify_dirs=False):
+    def backtrack(self, *, update_info=False):
         self.head = self.head.prev
-        if modify_dirs:
+        if update_info:
             self.head.old_dirs.append(self.head.dirs.pop())
 
     def get_dirs_choices(self, initial_dirs_choices: Dirs) -> Dirs:
