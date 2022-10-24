@@ -4,7 +4,7 @@ from collections.abc import Sequence
 
 from dirs import Dirs
 from laby import Laby
-from routing import Router, Route
+from router import Router, Route
 
 
 def main():
