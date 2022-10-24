@@ -9,9 +9,13 @@ from dirs import Dirs, Pos
 class Route:
     def __init__(self, pos: Pos):
         self.pos = pos
+        """Current position."""
         self.dirs = []
+        """The directions taken from there."""
         self.old_dirs = []
+        """The directions taken from there that we have backtracked from."""
         self.prev = None
+        """The route that took us there."""
 
     @cache
     def __len__(self) -> int:
