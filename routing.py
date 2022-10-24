@@ -51,7 +51,7 @@ class Route:
         return f'{self.__class__.__name__}({self.pos}, {self.dirs})'
 
 
-class MultiRoute:
+class Router:
     def __init__(self, pos: Pos):
         route = Route(pos)
         self._routes = [route]
@@ -61,6 +61,28 @@ class MultiRoute:
 
     def __iter__(self) -> Iterable[Route]:
         return self._routes.__iter__()
+
+    def advance(self, next_dir: Dirs):
+        current_route = self.head
+        next_route = Route(current_route.pos + next_dir)
+        self.head.dirs.append(next_dir)
+
+        self.head = next_route
+        self.head.prev = current_route
+
+    def backtrack(self, *, modify_dirs=False):
+        self.head = self.head.prev
+        if modify_dirs:
+            self.head.old_dirs.append(self.head.dirs.pop())
+
+    def get_dirs_choices(self, initial_dirs_choices: Dirs) -> Dirs:
+        dirs_choices = initial_dirs_choices
+        for already_chosen_dir in self.head.dirs + self.head.old_dirs:
+            dirs_choices &= ~already_chosen_dir
+        for dir_ in dirs_choices:
+            if self.head.pos + dir_ in self.all_poss:
+                dirs_choices &= ~dir_
+        return dirs_choices
 
     @property
     def head(self) -> Route:
@@ -86,27 +108,3 @@ class MultiRoute:
         for route in self._routes:
             all_poss = all_poss.union(route.all_poss)
         return all_poss
-
-
-class Router(MultiRoute):
-    def backtrack(self, *, modify_dirs=False):
-        self.head = self.head.prev
-        if modify_dirs:
-            self.head.old_dirs.append(self.head.dirs.pop())
-
-    def advance(self, next_dir: Dirs):
-        current_route = self.head
-        next_route = Route(current_route.pos + next_dir)
-        self.head.dirs.append(next_dir)
-
-        self.head = next_route
-        self.head.prev = current_route
-
-    def get_dirs_choices(self, initial_dirs_choices: Dirs) -> Dirs:
-        dirs_choices = initial_dirs_choices
-        for already_chosen_dir in self.head.dirs + self.head.old_dirs:
-            dirs_choices &= ~already_chosen_dir
-        for dir_ in dirs_choices:
-            if self.head.pos + dir_ in self.all_poss:
-                dirs_choices &= ~dir_
-        return dirs_choices
