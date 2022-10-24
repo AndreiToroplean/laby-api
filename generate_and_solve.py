@@ -26,7 +26,7 @@ def generate(shape: Sequence[int]) -> Laby:
         except RouteNotFoundError:
             break
 
-        router.branch_routes()
+        router.add_route(router.head.prev)
 
     laby.write_all_nodes(Dirs.NONE)
     for route in router:

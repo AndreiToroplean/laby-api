@@ -110,6 +110,3 @@ class Router(MultiRoute):
             if self.head.pos + dir_ in self.all_poss:
                 dirs_choices &= ~dir_
         return dirs_choices
-
-    def branch_routes(self):
-        self.add_route(self.head.prev)
