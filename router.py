@@ -67,12 +67,12 @@ class Router:
         return self._routes.__iter__()
 
     def advance(self, next_dir: Dirs):
-        current_route = self.head
-        next_route = Route(current_route.pos + next_dir)
+        current_head = self.head
+        next_head = Route(current_head.pos + next_dir)
         self.head.dirs.append(next_dir)
 
-        self.head = next_route
-        self.head.prev = current_route
+        self.head = next_head
+        self.head.prev = current_head
 
     def backtrack(self, *, update_info=False):
         self.head = self.head.prev
