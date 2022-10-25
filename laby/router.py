@@ -8,13 +8,13 @@ from laby.dirs import Dirs, Pos
 
 class Route:
     def __init__(self, pos: Pos):
-        self.pos = pos
+        self.pos: Pos = pos
         """Current position."""
-        self.dirs = []
+        self.dirs: list[Dirs] = []
         """The directions taken from there."""
-        self.old_dirs = []
+        self.old_dirs: list[Dirs] = []
         """The directions taken from there that we have backtracked from."""
-        self.prev = None
+        self.prev: Route | None = None
         """The route that took us there."""
 
     @cache
@@ -58,7 +58,7 @@ class Route:
 class Router:
     def __init__(self, pos: Pos):
         route = Route(pos)
-        self._routes = [route]
+        self._routes: list[Route] = [route]
 
     def add_route(self, route: Route):
         self._routes.append(route)
