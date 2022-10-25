@@ -10,6 +10,8 @@ readme = "README.md"
 python = "^3.10"
 core = {git = "https://github.com/AndreiToroplean/core.git"}
 
+[tool.poetry.scripts]
+generate_and_solve = 'laby.generate_and_solve:main'
 
 [build-system]
 requires = ["poetry-core"]
