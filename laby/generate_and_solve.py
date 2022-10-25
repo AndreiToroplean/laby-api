@@ -19,14 +19,15 @@ def main():
 
 def generate(shape: Sequence[int]) -> Laby:
     laby = generate_empty(shape)
-    router = Router(pos=laby.start)
-    while True:
-        try:
-            router = _find_route(laby, router)
-        except RouteNotFoundError:
-            break
+    with laby.reversed():
+        router = Router(pos=laby.start)
+        while True:
+            try:
+                router = _find_route(laby, router)
+            except RouteNotFoundError:
+                break
 
-        router.branch_routes()
+            router.branch_routes()
 
     laby.write_all_nodes(Dirs.NONE)
     for route in router:
