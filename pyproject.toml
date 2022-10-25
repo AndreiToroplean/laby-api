@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "laby"
+version = "0.1.0"
+description = "Simple labyrinth manipulations."
+authors = ["Andrei Toroplean <60916097+AndreiToroplean@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+core = {git = "https://github.com/AndreiToroplean/core.git"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
