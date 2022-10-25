@@ -103,14 +103,16 @@ class Laby:
 
     def write(self, route: Route, *, do_walls=True):
         for route_point in route:
+            if not route_point.dir:
+                continue
+
             node = self._grid[route_point.pos]
             neighbors = self._get_neighbors(route_point.pos)
-            for dir_ in route_point.dirs:
-                if do_walls:
-                    node.dirs |= dir_
-                    neighbors[dir_].dirs |= dir_.opposite()
-                else:
-                    node.route_dirs |= dir_
+            if do_walls:
+                node.dirs |= route_point.dir
+                neighbors[route_point.dir].dirs |= route_point.dir.opposite()
+            else:
+                node.route_dirs |= route_point.dir
 
     def __str__(self) -> str:
         return '\n'.join(self.strs)

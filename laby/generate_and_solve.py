@@ -62,7 +62,7 @@ def _find_route(laby: Laby, router: Router = None) -> Router:
             if not router.is_head_main and has_advanced:
                 return router
 
-            router.backtrack(update_info=has_advanced)
+            router.backtrack(recreate=not has_advanced)
             continue
 
         has_advanced = True
