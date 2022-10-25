@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Sequence, Union
 
-from utils import GetIndices, SetIndices
+from laby.utils import GetIndices, SetIndices
 
 _GridValue = Sequence[Union[Any, '_GridValue']]
 

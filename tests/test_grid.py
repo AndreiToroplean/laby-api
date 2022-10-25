@@ -1,6 +1,6 @@
 import pytest
 
-from grid import Grid
+from laby.grid import Grid
 
 
 class TestGrid:

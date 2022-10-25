@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from functools import cache, cached_property
 
-from dirs import Dirs, Pos
+from laby.dirs import Dirs, Pos
 
 
 class Route:
@@ -37,7 +37,7 @@ class Route:
         return self.prev.start
 
     def __str__(self) -> str:
-        from laby import Laby
+        from laby.laby import Laby
 
         rows, cols = zip(*self.all_poss)
         shape = (max(rows)+1, max(cols)+1)

@@ -4,12 +4,12 @@ from collections.abc import Sequence, Callable, Iterable
 from functools import cache, cached_property
 from typing import Any
 
-from char import Char
-from grid import Grid
-from node import Node
-from router import Route
-from utils import SetIndices
-from dirs import Dirs, Pos
+from laby.char import Char
+from laby.grid import Grid
+from laby.node import Node
+from laby.router import Route
+from laby.utils import SetIndices
+from laby.dirs import Dirs, Pos
 
 
 class Laby:
