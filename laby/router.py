@@ -107,7 +107,8 @@ class Router:
         dirs_choices = initial_dirs_choices
         dirs_choices &= ~(self.head.dir | self.head.old_dirs)
         for dir_ in dirs_choices:
-            if self.head.pos + dir_ in self.all_poss:
+            next_potential_pos = self.head.pos + dir_
+            if next_potential_pos in self.all_poss or next_potential_pos in self.head.ahead_poss:
                 dirs_choices &= ~dir_
         return dirs_choices
 
