@@ -94,10 +94,12 @@ class Router:
         self.head.prev = current_head
 
     def backtrack(self, *, recreate: bool):
-        prev_head = self.head.prev
+        current_head = self.head
+        prev_head = current_head.prev
         if recreate:
             prev_head = prev_head.copy()
         self.head = prev_head
+        self.head.ahead_poss.update(current_head.ahead_poss.union((current_head.pos, )))
         self.head.old_dirs |= self.head.dir
         self.head.dir = Dirs.NONE
 
