@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence, Callable, Iterable
+from contextlib import contextmanager
 from functools import cache, cached_property
 from typing import Any
 
@@ -113,6 +114,12 @@ class Laby:
                 neighbors[route_point.dir].dirs |= route_point.dir.opposite()
             else:
                 node.route_dirs |= route_point.dir
+
+    @contextmanager
+    def reversed(self):
+        self._start, self._finish = self._finish, self._start
+        yield
+        self._finish, self._start = self._start, self._finish
 
     def __str__(self) -> str:
         return '\n'.join(self.strs)
