@@ -17,6 +17,13 @@ class Route:
         self.prev: Route | None = None
         """The route that took us there."""
 
+    def copy(self):
+        new_route = self.__class__(self.pos)
+        new_route.dirs[:] = self.dirs
+        new_route.old_dirs[:] = self.old_dirs
+        new_route.prev = self.prev
+        return new_route
+
     @cache
     def __len__(self) -> int:
         return len(list(iter(self)))
