@@ -10,6 +10,8 @@ class Route:
     def __init__(self, pos: Pos):
         self.pos: Pos = pos
         """Current position."""
+        self.ahead_poss = set()
+        """Visited positions from there, that we have backtracked from."""
         self.dir: Dirs = Dirs.NONE
         """The directions taken from there."""
         self.old_dirs: Dirs = Dirs.NONE
@@ -19,6 +21,7 @@ class Route:
 
     def copy(self):
         new_route = self.__class__(self.pos)
+        new_route.ahead_poss = self.ahead_poss.copy()
         new_route.dir = self.dir
         new_route.old_dirs = self.old_dirs
         new_route.prev = self.prev
