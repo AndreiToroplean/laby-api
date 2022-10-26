@@ -8,6 +8,7 @@ from laby.router import Router, Route
 
 
 def main():
+    """Generate a random laby, then solve it. Display both the problem and the solution."""
     laby = generate((12, 16))
     print(laby)
     print()
@@ -18,6 +19,7 @@ def main():
 
 
 def generate(shape: Sequence[int]) -> Laby:
+    """Generate a random laby of the given shape."""
     laby = generate_empty(shape)
     with laby.reversed():
         router = Router(pos=laby.start)
@@ -37,6 +39,7 @@ def generate(shape: Sequence[int]) -> Laby:
 
 
 def generate_empty(shape: Sequence[int]) -> Laby:
+    """Generate an empty laby of the given shape."""
     laby = Laby.ones(shape)
     laby.start = (0, 0)
     laby.finish = (index - 1 for index in shape)
@@ -44,11 +47,18 @@ def generate_empty(shape: Sequence[int]) -> Laby:
 
 
 def solve(laby: Laby) -> Route:
+    """Solve the given laby and return the route."""
     router = _find_route(laby)
     return router.head
 
 
 def _find_route(laby: Laby, router: Router = None) -> Router:
+    """Find a route through the given laby, using the router's current head.
+
+    :param laby: Laby to use as an environment.
+    :param router: Router to use. No routes are added or removed, the head is only advanced / backtracked.
+    :return: The router containing the found route.
+    """
     if router is None:
         router = Router(pos=laby.start)
 
@@ -74,6 +84,7 @@ def _find_route(laby: Laby, router: Router = None) -> Router:
 
 
 class RouteNotFoundError(Exception):
+    """Exception raised when the whole environment was explored and no further route could be found."""
     pass
 
 
