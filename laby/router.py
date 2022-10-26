@@ -90,18 +90,24 @@ class Route:
 
 
 class Router:
+    """Manager of routes. Able to advance and backtrack a head route, give the directions in which
+    it can go next, and branch it into a new head. Can represent all the possible routes in a laby.
+    """
     def __init__(self, pos: Pos):
         route = Route(pos)
         self._routes: list[Route] = [route]
 
     def branch_routes(self):
+        """Create a new head by copying this head's previous point."""
         self._routes.append(self.head.prev.copy())
         self.head.ahead_poss.clear()
 
     def __iter__(self) -> Iterable[Route]:
+        """Iterate through all the routes in this router."""
         return self._routes.__iter__()
 
     def advance(self, dir_: Dirs):
+        """Advance the head route in the given direction."""
         current_head = self.head
         next_head = Route(current_head.pos + dir_)
         self.head.dir = dir_
@@ -110,6 +116,10 @@ class Router:
         self.head.prev = current_head
 
     def backtrack(self, *, recreate: bool):
+        """Backtrack head.
+
+        :param recreate: Re-instantiate the point we get to, and forget where we came from.
+        """
         current_head = self.head
         prev_head = current_head.prev
         if recreate:
@@ -121,6 +131,10 @@ class Router:
         self.head.dir = Dirs.NONE
 
     def get_dirs_choices(self, initial_dirs_choices: Dirs) -> Dirs:
+        """Get the choices we have for new directions to advance to.
+
+        :param initial_dirs_choices: The direction choices dictated by the environment, to filter from.
+        """
         dirs_choices = initial_dirs_choices
         dirs_choices &= ~(self.head.dir | self.head.old_dirs)
         for dir_ in dirs_choices:
@@ -131,17 +145,24 @@ class Router:
 
     @property
     def head(self) -> Route:
+        """The head route, the one being presently manipulated."""
         return self._routes[-1]
 
     @head.setter
     def head(self, route: Route):
+        """The head route, the one being presently manipulated."""
         self._routes[-1] = route
 
     @property
     def is_head_main(self) -> bool:
+        """Whether the current head route is the main (or first) route."""
         return self.head is self._routes[0]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Get the visual str of all the routes in this router as applied to a laby.
+
+        This is mainly for debugging.
+        """
         from laby.laby import Laby
         laby = Laby.ones(self.shape)
         for route in self._routes:
@@ -149,12 +170,17 @@ class Router:
         return str(laby)
 
     @property
-    def shape(self):
+    def shape(self) -> Pos:
+        """Shape of this router, meaning the dimensions of the smallest laby able to contain all its routes."""
         route_shapes = [route.shape for route in self._routes]
         rows, cols = zip(*route_shapes)
         return Pos((max(rows), max(cols)))
 
     def __len__(self) -> int:
+        """The total number of points in all the routes of this router.
+
+        Warning: Some points may be counted more than once.
+        """
         len_ = 0
         for route in self._routes:
             len_ += len(route)
@@ -162,6 +188,7 @@ class Router:
 
     @property
     def all_poss(self) -> set[Pos]:
+        """All positions visited by all this router's routes until this point."""
         all_poss = set()
         for route in self._routes:
             all_poss = all_poss.union(route.all_poss)
