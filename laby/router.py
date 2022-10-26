@@ -98,6 +98,7 @@ class Router:
         prev_head = current_head.prev
         if recreate:
             prev_head = prev_head.copy()
+            prev_head.ahead_poss.clear()
         self.head = prev_head
         self.head.ahead_poss.update(current_head.ahead_poss.union((current_head.pos, )))
         self.head.old_dirs |= self.head.dir
