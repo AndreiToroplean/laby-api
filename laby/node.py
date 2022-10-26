@@ -77,7 +77,7 @@ class Node:
             if self.route_dirs & edge_dir or neighbor_route_dirs & edge_dir.opposite():
                 edge_route_dirs |= edge_dir | edge_dir.opposite()
             if edge_route_dirs == Dirs.H or edge_route_dirs == Dirs.V:
-                arrow_dir = self.route_dirs if edge_route_dirs & self.route_dirs else neighbor_route_dirs
+                arrow_dir = edge_dir if self.route_dirs & edge_dir else edge_dir.opposite()
                 label = Char.ARROW[arrow_dir]
             else:
                 label = Char.CORNER[edge_route_dirs]
