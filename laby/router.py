@@ -118,6 +118,19 @@ class Router:
     def is_head_main(self) -> bool:
         return self.head is self._routes[0]
 
+    def __str__(self):
+        from laby.laby import Laby
+        laby = Laby.ones(self.shape)
+        for route in self._routes:
+            laby = route.write_on_laby(laby)
+        return str(laby)
+
+    @property
+    def shape(self):
+        route_shapes = [route.shape for route in self._routes]
+        rows, cols = zip(*route_shapes)
+        return Pos((max(rows), max(cols)))
+
     def __len__(self) -> int:
         len_ = 0
         for route in self._routes:
