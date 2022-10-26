@@ -101,10 +101,10 @@ class Router:
     def __iter__(self) -> Iterable[Route]:
         return self._routes.__iter__()
 
-    def advance(self, next_dir: Dirs):
+    def advance(self, dir_: Dirs):
         current_head = self.head
-        next_head = Route(current_head.pos + next_dir)
-        self.head.dir = next_dir
+        next_head = Route(current_head.pos + dir_)
+        self.head.dir = dir_
 
         self.head = next_head
         self.head.prev = current_head

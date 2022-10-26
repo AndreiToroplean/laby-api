@@ -67,8 +67,8 @@ def _find_route(laby: Laby, router: Router = None) -> Router:
             continue
 
         has_advanced = True
-        next_dir = dirs_choices.choice()
-        router.advance(next_dir)
+        dir_ = dirs_choices.choice()
+        router.advance(dir_)
 
     return router
 
