@@ -7,6 +7,9 @@ from laby.dirs import Dirs, Pos
 
 
 class Route:
+    """Represents a route through a laby. Each instance is a route point, connected to the previous
+    one, they form the whole route.
+    """
     def __init__(self, pos: Pos):
         self.pos: Pos = pos
         """Current position."""
@@ -20,6 +23,7 @@ class Route:
         """The route that took us there."""
 
     def copy(self):
+        """Create a copy of this route point, still connected to the same previous point."""
         new_route = self.__class__(self.pos)
         new_route.ahead_poss = self.ahead_poss.copy()
         new_route.dir = self.dir
@@ -29,20 +33,27 @@ class Route:
 
     @cache
     def __len__(self) -> int:
+        """The number of points in the whole route."""
         return len(list(iter(self)))
 
     @cached_property
     def start(self) -> Route:
+        """The start point of this route."""
         if self.prev is None:
             return self
 
         return self.prev.start
 
     def __str__(self) -> str:
+        """Get the visual str of this route as applied to a laby.
+
+        This is mainly for debugging.
+        """
         laby = self.write_on_laby()
         return str(laby)
 
     def write_on_laby(self, laby: 'Laby' = None) -> 'Laby':
+        """Write this route on the given laby (or a new one if none is given) and return it."""
         if laby is None:
             from laby.laby import Laby
             laby = Laby.ones(self.shape)
@@ -51,22 +62,26 @@ class Route:
 
     @cached_property
     def shape(self) -> Pos:
+        """Shape of this route, meaning the dimensions of the smallest laby able to contain all its positions."""
         if not self.all_poss:
             return Pos((0, 0))
         rows, cols = zip(*self.all_poss)
         return Pos((max(rows) + 1, max(cols) + 1))
 
     def __iter__(self) -> Iterable[Route]:
+        """Iterate through all the points in this route, starting by this one (a.k.a. the end)."""
         route = self
         while route is not None:
             yield route
             route = route.prev
 
     def __repr__(self) -> str:
+        """Small representation of the main attributes of this route point."""
         return f'{self.__class__.__name__}({self.pos}, {self.dir})'
 
     @cached_property
     def all_poss(self) -> set[Pos]:
+        """All positions visited by this route until this point."""
         all_poss = {self.pos}
         if self.prev is None:
             return all_poss
