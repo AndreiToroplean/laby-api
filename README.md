@@ -61,4 +61,6 @@ And solve them like so:
 ```
 
 ____
-To try it out, hit `python -m generate_and_solve`. 
+To try it out using [Poetry](https://python-poetry.org/):
+- Clone the repo: `git clone https://github.com/AndreiToroplean/laby.git`;
+- And run: `poetry run generate_and_solve`. 
