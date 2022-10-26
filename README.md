@@ -62,6 +62,3 @@ And solve them like so:
 
 ____
 To try it out, hit `python -m generate_and_solve`. 
-
-____
-Known issue: sometimes gets stuck in an infinite loop. Will be fixed soon, in the meantime you can interrupt it and run it again.
