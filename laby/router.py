@@ -79,8 +79,9 @@ class Router:
         route = Route(pos)
         self._routes: list[Route] = [route]
 
-    def add_route(self, route: Route):
-        self._routes.append(route)
+    def branch_routes(self):
+        self._routes.append(self.head.prev.copy())
+        self.head.ahead_poss.clear()
 
     def __iter__(self) -> Iterable[Route]:
         return self._routes.__iter__()
