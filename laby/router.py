@@ -36,13 +36,22 @@ class Route:
         return self.prev.start
 
     def __str__(self) -> str:
-        from laby.laby import Laby
-
-        rows, cols = zip(*self.all_poss)
-        shape = (max(rows)+1, max(cols)+1)
-        laby = Laby.ones(shape)
-        laby.write(self, do_walls=False)
+        laby = self.write_on_laby()
         return str(laby)
+
+    def write_on_laby(self, laby: 'Laby' = None) -> 'Laby':
+        if laby is None:
+            from laby.laby import Laby
+            laby = Laby.ones(self.shape)
+        laby.write(self, do_walls=False)
+        return laby
+
+    @cached_property
+    def shape(self) -> Pos:
+        if not self.all_poss:
+            return Pos((0, 0))
+        rows, cols = zip(*self.all_poss)
+        return Pos((max(rows) + 1, max(cols) + 1))
 
     def __iter__(self) -> Iterable[Route]:
         route = self
