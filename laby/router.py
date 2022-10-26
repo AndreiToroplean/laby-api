@@ -29,14 +29,6 @@ class Route:
         return len(list(iter(self)))
 
     @cached_property
-    def all_poss(self) -> set[Pos]:
-        all_poss = {self.pos}
-        if self.prev is None:
-            return all_poss
-
-        return all_poss.union(self.prev.all_poss)
-
-    @cached_property
     def start(self) -> Route:
         if self.prev is None:
             return self
@@ -60,6 +52,14 @@ class Route:
 
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self.pos}, {self.dir})'
+
+    @cached_property
+    def all_poss(self) -> set[Pos]:
+        all_poss = {self.pos}
+        if self.prev is None:
+            return all_poss
+
+        return all_poss.union(self.prev.all_poss)
 
 
 class Router:
