@@ -133,23 +133,8 @@ class Laby:
         for j, node in enumerate(row):
             indices = i, j
             neighbors = self._get_neighbors(indices)
-            self._check_neighbors(self._display_grid[indices], neighbors)
+            node.check_neighbors(neighbors)
             yield node.strs(neighbors)
-
-    @staticmethod
-    def _check_neighbors(node, neighbors: dict[Dirs, Node]):
-        def check_neighbor(neighbor_dir: Dirs) -> bool:
-            return (
-                (node.dirs & neighbor_dir or not neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
-                and (not node.dirs & neighbor_dir or neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
-            )
-
-        if node._is_virtual:
-            return
-
-        for dir_ in Dirs.seq():
-            if not check_neighbor(dir_):
-                raise Exception("Incompatible neighboring nodes.")
 
     @property
     def _display_grid(self) -> Grid[Grid[Node]]:

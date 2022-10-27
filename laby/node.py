@@ -123,3 +123,17 @@ class Node:
 
     def __repr__(self):
         return f'{self.__class__.__name__}({self.dirs})'
+
+    def check_neighbors(self, neighbors: dict[Dirs, Node]):
+        def check_neighbor(neighbor_dir: Dirs) -> bool:
+            return (
+                (self.dirs & neighbor_dir or not neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
+                and (not self.dirs & neighbor_dir or neighbors[neighbor_dir].dirs & neighbor_dir.opposite())
+            )
+
+        if self._is_virtual:
+            return
+
+        for dir_ in Dirs.seq():
+            if not check_neighbor(dir_):
+                raise Exception("Incompatible neighboring nodes.")
