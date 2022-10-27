@@ -13,16 +13,22 @@ from laby.dirs import Dirs, Pos
 
 
 class Laby:
+    """Represents a labyrinth, composed of discrete cartesian positions called nodes, forming a grid.
+    Although primarily designed to be 2D, some parts work for all (strictly positive) dimensions.
+    """
     @classmethod
     def zeros(cls, shape: Sequence[int]):
+        """Return a laby of the requested shape made out of zero-nodes, i.e. nodes that are entirely closed up."""
         return cls.full(shape, lambda: Node.zero())
 
     @classmethod
     def ones(cls, shape: Sequence[int]):
+        """Return a laby of the requested shape made out of one-nodes, i.e. nodes that are entirely open."""
         return cls.full(shape, lambda: Node.one())
 
     @classmethod
     def full(cls, shape: Sequence[int], fill_value: Callable[[], Node] | Node | Any):
+        """Return a laby of the requested shape made out of nodes like the one given."""
         def get_grid(shape_, fill_value_):
             if not shape_:
                 try:
@@ -40,41 +46,59 @@ class Laby:
 
     @classmethod
     def from_letters(cls, letters_grid: str):
+        """Return a laby corresponding to the grid given with the allowed direction letters.
+
+        :param letters_grid: String prescribing the laby. Each line represents a row of nodes,
+            separated by commas. Each node is prescribed through the letters representing its
+            allowed directions, from the first letters of 'left', 'right', 'up' and 'down'.
+        """
         grid = Grid([[Node(Dirs.from_letters(letters.strip().lower())) for letters in row_letters.split(',')]
                      for row_letters in letters_grid.splitlines()])
         return cls(grid)
 
     @classmethod
     def from_dirs(cls, dirs: Sequence[Sequence[Dirs]]):
+        """Return a laby corresponding to the grid given with the allowed directions."""
         grid = Grid([[Node(dir_) for dir_ in dirs_row] for dirs_row in dirs])
         return cls(grid)
 
     def __init__(self, grid: Grid[Grid[Node]]):
         self._grid = grid
-        self._enforce_walls()
-
+        """The grid of nodes."""
         self._start = None
+        """The start position in the laby."""
         self._finish = None
+        """The finish position in the laby."""
+
+        self._enforce_walls()
 
     @property
     def start(self) -> Pos:
+        """The start position in the laby."""
         return self._start
 
     @start.setter
     def start(self, indices: Sequence[int, int]):
+        """The start position in the laby."""
         self._start = Pos(indices)
         self._grid[self._start].label = Char.START
 
     @property
     def finish(self) -> Pos:
+        """The finish position in the laby."""
         return self._finish
 
     @finish.setter
     def finish(self, indices: Sequence[int, int]):
+        """The finish position in the laby."""
         self._finish = Pos(indices)
         self._grid[self._finish].label = Char.FINISH
 
     def __getitem__(self, indices: Sequence[int, ...] | int) -> Node:
+        """Get a node in the laby from its position.
+
+        Warning: you cannot get a sub-grid through this method.
+        """
         node = self._grid[indices]
         if not isinstance(node, Node):
             raise IndexError('Not enough indices to get a specific Node (cannot get sub-grids).')
@@ -82,6 +106,7 @@ class Laby:
         return node
 
     def _enforce_walls(self):
+        """Make the outermost nodes into walls, i.e. remove their outward directions."""
         for i, row in enumerate(self._grid):
             for j, node in enumerate(row):
                 if i == 0:
@@ -94,6 +119,11 @@ class Laby:
                     node.dirs &= ~Dirs.RIGHT
 
     def write_all_nodes(self, dirs: Dirs, *, do_walls=True):
+        """Write allowed directions or route directions for all nodes.
+
+        :param dirs: The new directions.
+        :param do_walls: Whether to write directions (creating walls), or else route directions.
+        """
         for row in self._grid:
             for node in row:
                 if do_walls:
@@ -102,6 +132,11 @@ class Laby:
                     node.route_dirs = dirs
 
     def write(self, route: Route, *, do_walls=True):
+        """Write allowed directions or route directions from a route object.
+
+        :param route: Route used to prescribe directions.
+        :param do_walls: Whether to write directions (creating walls), or else route directions.
+        """
         for route_point in route:
             if not route_point.dir:
                 continue
@@ -116,20 +151,24 @@ class Laby:
 
     @contextmanager
     def reversed(self):
+        """Context manager to reverse the start and finish of this laby."""
         self._start, self._finish = self._finish, self._start
         yield
         self._finish, self._start = self._start, self._finish
 
     def __str__(self) -> str:
+        """Get the str visually representing this laby."""
         return '\n'.join(self.strs)
 
     @property
     def strs(self) -> Iterable[str]:
+        """The strs visually representing this laby, one per visual row."""
         for i, row in enumerate(self._display_grid):
             for strs in zip(*self._get_row_node_strs(i, row)):
                 yield ''.join(strs)
 
-    def _get_row_node_strs(self, i, row):
+    def _get_row_node_strs(self, i: int, row: Grid[Node]) -> Iterable[Iterable[str]]:
+        """Get the strs visually representing the given row, one iterable per node."""
         for j, node in enumerate(row):
             indices = Pos((i, j))
             neighbors = self._get_neighbors(indices)
@@ -138,6 +177,7 @@ class Laby:
 
     @property
     def _display_grid(self) -> Grid[Grid[Node]]:
+        """A display-specific grid of nodes, with additional ones to properly draw exterior walls."""
         display_grid = self._grid + [[Node.virtual(Dirs.UP) for _ in range(self._shape[1])]]
         display_grid = Grid([row + [Node.virtual(Dirs.LEFT)] for row in display_grid])
         display_grid[self._shape].dirs |= Dirs.ALL
@@ -145,6 +185,8 @@ class Laby:
 
     @cache
     def _get_neighbors(self, indices: Pos) -> dict[Dirs, Node]:
+        """Get the neighbors of the node at the given position, indexed by direction."""
+
         def get_neighbor(indices_: Pos) -> Node:
             i_, j_ = indices_
             wall_dirs = Dirs.NONE
@@ -174,6 +216,7 @@ class Laby:
 
     @cached_property
     def _shape(self) -> tuple[int, ...]:
+        """The shape of the laby, i.e. its dimensions."""
         def get_shape(grid) -> tuple[int, ...]:
             try:
                 sub_grid = grid[0]
@@ -185,4 +228,5 @@ class Laby:
         return get_shape(self._grid)
 
     def __repr__(self) -> str:
+        """Get a simple, abstract representation of the laby for debugging."""
         return f'{self.__class__.__name__}({self._grid})'
