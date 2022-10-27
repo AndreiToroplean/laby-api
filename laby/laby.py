@@ -9,7 +9,6 @@ from laby.char import Char
 from laby.grid import Grid
 from laby.node import Node
 from laby.router import Route
-from laby.utils import SetIndices
 from laby.dirs import Dirs, Pos
 
 
@@ -75,7 +74,7 @@ class Laby:
         self._finish = Pos(indices)
         self._grid[self._finish].label = Char.FINISH
 
-    def __getitem__(self, indices: SetIndices) -> Node:
+    def __getitem__(self, indices: Sequence[int, ...] | int) -> Node:
         node = self._grid[indices]
         if not isinstance(node, Node):
             raise IndexError('Not enough indices to get a specific Node (cannot get sub-grids).')

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import Any, Sequence, Union
 
-from laby.utils import GetIndices, SetIndices
 
 _GridValue = Sequence[Union[Any, '_GridValue']]
 
@@ -42,7 +41,7 @@ class Grid(list):
         repr_items_str = f'[\n{repr_items_str},\n]'
         return repr_class(repr_items_str)
 
-    def __setitem__(self, index: SetIndices, item: _GridValue | Any):
+    def __setitem__(self, index: Sequence[int, ...] | int, item: _GridValue | Any):
         try:
             index, *indices = index
         except TypeError:
@@ -57,7 +56,7 @@ class Grid(list):
 
         self.__getitem__(index).__setitem__(indices, item)
 
-    def __getitem__(self, index: GetIndices) -> _GridValue | Any:
+    def __getitem__(self, index: Sequence[int | slice, ...] | int | slice) -> _GridValue | Any:
         try:
             index, *indices = index
         except TypeError:
