@@ -186,14 +186,3 @@ class Laby:
 
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self._grid})'
-
-
-example_laby = Laby.from_letters(
-    'r, ld, r, lr, ld, d\n'
-    'd, ud, rd, lr, lru, lud\n'
-    'ud, ud, ud, rd, lr, lu\n'
-    'ud, ru, lud, rud, lr, l\n'
-    'ur, lr, lu, ur, lr, l'
-)
-example_laby.start = (0, 0)
-example_laby.finish = (4, 5)
