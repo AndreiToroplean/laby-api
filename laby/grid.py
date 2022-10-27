@@ -7,6 +7,7 @@ _GridValue = Sequence[Union[Any, '_GridValue']]
 
 
 class Grid(list):
+    """A multidimensional list, with some syntactic sugar. It is meant to be homogenous in types."""
     def __init__(self, value: _GridValue = ()):
         try:
             first_item = value[0]
