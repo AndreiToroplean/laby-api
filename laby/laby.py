@@ -131,7 +131,7 @@ class Laby:
 
     def _get_row_node_strs(self, i, row):
         for j, node in enumerate(row):
-            indices = i, j
+            indices = Pos((i, j))
             neighbors = self._get_neighbors(indices)
             node.check_neighbors(neighbors)
             yield node.strs(neighbors)
@@ -144,7 +144,7 @@ class Laby:
         return display_grid
 
     @cache
-    def _get_neighbors(self, indices: Sequence[int, int]) -> dict[Dirs, Node]:
+    def _get_neighbors(self, indices: Pos) -> dict[Dirs, Node]:
         def get_neighbor(indices_: Pos) -> Node:
             i_, j_ = indices_
             wall_dirs = Dirs.NONE
@@ -164,7 +164,6 @@ class Laby:
 
             return self._grid[i_, j_]
 
-        indices = Pos(indices)
         max_i, max_j = self._shape
         return {
             Dirs.LEFT: get_neighbor(indices + Dirs.LEFT),
