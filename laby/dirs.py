@@ -15,7 +15,7 @@ class Dirs(enum.Flag):
     ALL = LEFT | RIGHT | UP | DOWN
 
     @classmethod
-    def from_letters(cls, letters: str) -> Dirs:
+    def from_letters(cls, letters: Iterable[str]) -> Dirs:
         dirs = cls.NONE
         for letter in letters:
             try:
@@ -51,7 +51,7 @@ class Dirs(enum.Flag):
 
         return random.choice(members)
 
-    def delta(self) -> Sequence[int, int]:
+    def delta(self) -> tuple[int, int]:
         try:
             return _DIR_DELTAS[self]
         except KeyError:
