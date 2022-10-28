@@ -115,12 +115,17 @@ _LETTERS_TO_DIRS = {
 
 
 class Pos(tuple):
+    """Represents a position in a grid, in a way that adding a dirs returns the position
+    translated by the dirs' delta.
+    """
     def __new__(cls, indices: Sequence[int, int]):
         return ().__new__(cls, indices)
 
     def __add__(self, dir_: Dirs) -> Pos:
+        """Return the result of translating this position by the dirs' delta."""
         delta = dir_.delta()
         return self.__class__([self[0] + delta[0], self[1] + delta[1]])
 
     def __repr__(self) -> str:
+        """Return a representation of this position for debugging."""
         return f'{self.__class__.__name__}({super().__repr__()})'
