@@ -9,19 +9,25 @@ _H_LEN = 5
 
 
 class _CharVariants(str):
-    def __new__(cls, value: str, bold: str = None):
+    """Represents a char with variants (regular, bold)."""
+    def __new__(cls, value: str, bold: str = None) -> _CharVariants:
         instance = super().__new__(cls, value)
         instance._bold = bold
         return instance
 
     @property
     def bold(self) -> str:
+        """Bold variant of the char."""
         if self._bold is not None:
             return self._bold
 
         return self
 
     def transform(self, transformation: Callable[[str], str]) -> _CharVariants:
+        """Apply a transformation to all variants and return the result.
+
+        :param transformation: The function to transform the variants with.
+        """
         return self.__class__(
             transformation(self),
             transformation(self._bold),
@@ -29,6 +35,7 @@ class _CharVariants(str):
 
 
 class Char:
+    """Represents a visual part (corner, edge, center, label) of a node."""
     START = _CharVariants('←┼→')
     FINISH = _CharVariants('→┼←')
 
