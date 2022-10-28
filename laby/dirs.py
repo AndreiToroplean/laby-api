@@ -6,6 +6,9 @@ import random
 
 
 class Dirs(enum.Flag):
+    """Represents a direction, a set of directions, or a composition of directions,
+    from left, right, up and down.
+    """
     LEFT = enum.auto()
     RIGHT = enum.auto()
     UP = enum.auto()
@@ -16,6 +19,10 @@ class Dirs(enum.Flag):
 
     @classmethod
     def from_letters(cls, letters: Iterable[str]) -> Dirs:
+        """Get a dirs from a set of letters.
+
+        :param letters: The prescribed directions with the first letters from 'left', 'right', 'up' and 'down'.
+        """
         dirs = cls.NONE
         for letter in letters:
             try:
@@ -27,15 +34,18 @@ class Dirs(enum.Flag):
 
     @classmethod
     def seq(cls) -> Sequence[Dirs, Dirs, Dirs, Dirs]:
+        """Get the sequence of simple dirs in the order left, right, up and down."""
         return cls.LEFT, cls.RIGHT, cls.UP, cls.DOWN
 
     def opposite(self) -> Dirs:
+        """Get the opposite to this dirs, if it is a simple dir, else raise."""
         try:
             return _DIR_OPPOSITES[self]
         except KeyError:
             raise DirsError(f"Arbitrary {self.__class__.__name__} compositions don't have opposites.") from None
 
     def normal(self) -> Dirs:
+        """Get the normal to this dirs, if applicable, else raise."""
         if self | Dirs.H == Dirs.H:
             return Dirs.V
 
@@ -45,6 +55,7 @@ class Dirs(enum.Flag):
         raise DirsError(f"{self} doesn't have a normal.")
 
     def choice(self) -> Dirs:
+        """Get a random simple dir from this dirs."""
         members = list(self)
         if not members:
             return Dirs.NONE
@@ -52,12 +63,14 @@ class Dirs(enum.Flag):
         return random.choice(members)
 
     def delta(self) -> tuple[int, int]:
+        """Get the delta of this dirs, when applied as a translation in a grid."""
         try:
             return _DIR_DELTAS[self]
         except KeyError:
             raise DirsError(f'Cannot get delta for an arbitrary {self.__class__.__name__} composition.') from None
 
     def __iter__(self) -> Iterable[Dirs]:
+        """Iterate through all the simple dirs in this dirs."""
         for dir_ in self.seq():
             if not self & dir_:
                 continue
