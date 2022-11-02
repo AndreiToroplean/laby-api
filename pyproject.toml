@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 core = {git = "https://github.com/AndreiToroplean/core.git"}
+pytest = "^7.2.0"
 
 [tool.poetry.scripts]
 generate_and_solve = 'laby_api.generate_and_solve:main'
