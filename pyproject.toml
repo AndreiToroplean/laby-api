@@ -1,9 +1,9 @@
 [tool.poetry]
-name = "laby"
+name = "laby-api"
 version = "0.1.0"
 description = "Simple labyrinth manipulations."
 authors = ["Andrei Toroplean <60916097+AndreiToroplean@users.noreply.github.com>"]
-repository = "https://github.com/AndreiToroplean/laby"
+repository = "https://github.com/AndreiToroplean/laby-api"
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -11,7 +11,7 @@ python = "^3.10"
 core = {git = "https://github.com/AndreiToroplean/core.git"}
 
 [tool.poetry.scripts]
-generate_and_solve = 'laby.generate_and_solve:main'
+generate_and_solve = 'laby_api.generate_and_solve:main'
 
 [build-system]
 requires = ["poetry-core"]

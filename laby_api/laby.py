@@ -5,11 +5,11 @@ from contextlib import contextmanager
 from functools import cache, cached_property
 from typing import Any
 
-from laby.char import Char
-from laby.grid import Grid
-from laby.node import Node
-from laby.router import Route
-from laby.dirs import Dirs, Pos
+from laby_api.char import Char
+from laby_api.grid import Grid
+from laby_api.node import Node
+from laby_api.router import Route
+from laby_api.dirs import Dirs, Pos
 
 
 class Laby:

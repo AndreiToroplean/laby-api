@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from laby.dirs import Dirs
+from laby_api.dirs import Dirs
 
 
 _H_LEN = 5

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from laby.dirs import Dirs
-from laby.laby import Laby
-from laby.router import Router, Route
+from laby_api.dirs import Dirs
+from laby_api.laby import Laby
+from laby_api.router import Router, Route
 
 
 def main():

@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from functools import cache, cached_property
 
-from laby.dirs import Dirs, Pos
+from laby_api.dirs import Dirs, Pos
 
 
 class Route:
@@ -55,7 +55,7 @@ class Route:
     def write_on_laby(self, laby: 'Laby' = None) -> 'Laby':
         """Write this route on the given laby (or a new one if none is given) and return it."""
         if laby is None:
-            from laby.laby import Laby
+            from laby_api.laby import Laby
             laby = Laby.ones(self.shape)
         laby.write(self, do_walls=False)
         return laby
@@ -163,7 +163,7 @@ class Router:
 
         This is mainly for debugging.
         """
-        from laby.laby import Laby
+        from laby_api.laby import Laby
         laby = Laby.ones(self.shape)
         for route in self._routes:
             laby = route.write_on_laby(laby)

@@ -1,4 +1,4 @@
-# laby
+# laby-api
 Simple labyrinth manipulations.
 
 ____

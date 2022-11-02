@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from collections.abc import Sequence, Iterable
 
-from laby.char import Char
-from laby.dirs import Dirs
+from laby_api.char import Char
+from laby_api.dirs import Dirs
 
 
 class Node:
