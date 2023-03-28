@@ -36,7 +36,7 @@ debugpy = "^1.6.3"
 type = "git"
 url = "https://github.com/AndreiToroplean/core.git"
 reference = "HEAD"
-resolved_reference = "8ae27c16ec172c19fba78cf7ac80c696ced8e6b4"
+resolved_reference = "79538d072ca74626843c57dea06fa2eb2eeeb9d2"
 
 [[package]]
 name = "debugpy"

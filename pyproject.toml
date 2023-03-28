@@ -5,6 +5,7 @@ description = "Simple labyrinth manipulations."
 authors = ["Andrei Toroplean <60916097+AndreiToroplean@users.noreply.github.com>"]
 repository = "https://github.com/AndreiToroplean/laby-api"
 readme = "README.md"
+packages = [ { include = "laby_api" } ]
 
 [tool.poetry.dependencies]
 python = "^3.10"
